@@ -3,7 +3,7 @@
 This directory contains opt-in tests that use real ExplainBench submissions and canonical SWE-bench execution.
 The normal test suite collects these tests but skips them unless they are explicitly enabled.
 
-The first module covers scenarios `S01` through `S07` from the real-data validation section in [PACKAGE_HANDOFF.md](../../PACKAGE_HANDOFF.md).
+The first module covers real-data validation scenarios `S01` through `S07`.
 It uses `examples/submission-full.json` and the real `sympy__sympy-15349` instance.
 
 ## Requirements

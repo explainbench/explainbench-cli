@@ -231,10 +231,6 @@ Checksummed attempt records support audit and reuse after interruption.
 One packaging adapter in `execution.util` builds the Docker tracer payload from the installed `tracer` and `tracer_plugin` packages.
 This removes the old dependency on a sibling `py-tracer` repository directory.
 
-See [EXPLAINBENCH_CLI_EXTRACTION_PLAN.md](EXPLAINBENCH_CLI_EXTRACTION_PLAN.md) for the implementation tracker.
-See [CORE_PROVENANCE.md](CORE_PROVENANCE.md) for the copied-source record.
-See [PACKAGE_HANDOFF.md](PACKAGE_HANDOFF.md) for current implementation and validation details.
-
 ## Development state
 
 The package extraction and local validation are complete.
