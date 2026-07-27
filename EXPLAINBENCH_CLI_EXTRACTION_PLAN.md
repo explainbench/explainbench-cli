@@ -1471,6 +1471,7 @@ Each format installed in a separate clean Python 3.12 environment.
 Both installations passed checker, mocked evaluator, builder, metadata, license, and `site-packages` smoke checks.
 All workflow YAML files parsed successfully.
 Both TestPyPI and PyPI returned HTTP 404 for the `explain-bench` project endpoint before upload.
+The exact endpoint check did not detect the registries' similar-name protection.
 
 Problems: Registry upload and downloaded-registry validation cannot run until the trusted publisher is configured and the user authorizes the upload.
 
@@ -1480,7 +1481,31 @@ Use separate `testpypi` and `pypi` GitHub environments with trusted publishing.
 Require the production tag to match `project.version`.
 Do not upload during this preparation task.
 
-Next action: Configure the TestPyPI trusted publisher, then dispatch `.github/workflows/testpypi.yml`.
+Next action: Change the distribution name to `explainbench-cli`, repeat the distribution checks, then configure its TestPyPI trusted publisher.
+
+Date: 2026-07-27.
+
+Phase: Distribution identity correction.
+
+Completed: Changed the distribution name from `explain-bench` to `explainbench-cli`.
+Kept the `explainbench` Python package and executable names.
+Updated the lockfile, clean-wheel assertions, release smoke program, real-Docker wheel pattern, TestPyPI workflow, production workflow, provenance record, README, and package handoff.
+Rebuilt the wheel and source distribution with the corrected identity.
+
+Checks: The lockfile resolves `explainbench-cli==0.1.0`.
+Both corrected artifacts passed `twine check --strict`.
+The wheel contains 108 files and has SHA-256 `b3a4c3bcba115b3fcd1b9e16bdee4a497dc074ec2073732cf8887abb77e6826e`.
+The source distribution contains 156 entries and has SHA-256 `76c0d213aa9a863c5535db5085a7dc64c0b704cb70c653c3d29e844b7dd02ad1`.
+Both formats installed in separate clean Python 3.12 environments and passed the installed-artifact smoke program.
+The complete suite reported 152 passed and 7 skipped.
+
+Problems: The `explain-bench` pending publisher was rejected because the name was too similar to an existing registry project.
+Registry upload and downloaded-registry validation remain pending.
+
+Decisions: Use `explainbench-cli` as the final distribution name.
+Keep `explainbench` as the import and executable name.
+
+Next action: Configure the `explainbench-cli` TestPyPI pending publisher and run the manual publishing workflow.
 
 ## Progress log template
 

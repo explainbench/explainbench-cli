@@ -148,4 +148,7 @@ def clean_wheel(tmp_path_factory: pytest.TempPathFactory) -> CleanWheel:
         )
     finally:
         shutil.rmtree(source_root / "build", ignore_errors=True)
-        shutil.rmtree(source_root / "explain_bench.egg-info", ignore_errors=True)
+        shutil.rmtree(
+            source_root / "explainbench_cli.egg-info",
+            ignore_errors=True,
+        )

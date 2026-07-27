@@ -37,12 +37,12 @@ def test_clean_checker(clean_wheel: CleanWheel):
         """
 from importlib.metadata import distribution, metadata
 
-package_metadata = metadata("explain-bench")
+package_metadata = metadata("explainbench-cli")
 assert package_metadata["License-Expression"] == "MIT"
 
 files = {
     str(path)
-    for path in (distribution("explain-bench").files or ())
+    for path in (distribution("explainbench-cli").files or ())
 }
 assert any(path.endswith(".dist-info/licenses/LICENSE") for path in files)
 assert any(

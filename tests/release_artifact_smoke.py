@@ -48,7 +48,7 @@ def _assert_installed_metadata() -> None:
         location = Path(package.__file__).resolve()
         assert "site-packages" in location.parts, location
 
-    package_metadata = metadata("explain-bench")
+    package_metadata = metadata("explainbench-cli")
     requires_python = package_metadata["Requires-Python"]
     assert ">=3.12" in requires_python
     assert "<3.13" in requires_python
@@ -56,7 +56,7 @@ def _assert_installed_metadata() -> None:
 
     files = {
         str(path)
-        for path in (distribution("explain-bench").files or ())
+        for path in (distribution("explainbench-cli").files or ())
     }
     assert any(path.endswith(".dist-info/licenses/LICENSE") for path in files)
     assert any(

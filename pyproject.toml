@@ -1,5 +1,5 @@
 [project]
-name = "explain-bench"
+name = "explainbench-cli"
 version = "0.1.0"
 description = "Validate and evaluate code-change explanations and build local-effect question artifacts"
 readme = "README.md"

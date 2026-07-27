@@ -9,7 +9,13 @@ The package is ready for repository development and release-candidate validation
 ## Installation
 
 ExplainBench supports Python 3.12.
-Clone the repository and install the package:
+After the first registry release, install the distribution with:
+
+```bash
+python -m pip install explainbench-cli
+```
+
+To install from source now, clone the repository:
 
 ```bash
 git clone https://github.com/explainbench/explainbench-cli.git

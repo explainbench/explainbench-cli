@@ -277,7 +277,7 @@ A regression test covers the package-shadowing case.
 
 Phase 12 confirmed these package metadata values:
 
-- Distribution name: `explain-bench`.
+- Distribution name: `explainbench-cli`.
 - Version: `0.1.0`.
 - Author: `explainbench-team`.
 - Author email: `imamnurby@gmail.com`.

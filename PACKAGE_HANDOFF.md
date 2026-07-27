@@ -671,7 +671,7 @@ The real workflow does not enable candidate inference and does not require a mod
 
 ## Release candidate
 
-The confirmed distribution name is `explain-bench`.
+The confirmed distribution name is `explainbench-cli`.
 The confirmed first version is `0.1.0`.
 The package author is `explainbench-team`.
 The author email is `imamnurby@gmail.com`.
@@ -682,12 +682,12 @@ The current direct runtime dependencies use exact versions.
 The final unpinned direct dependency was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
 
-The final local release-candidate wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
+The final local release-candidate wheel is `dist/explainbench_cli-0.1.0-py3-none-any.whl`.
 It contains 108 files.
-Its SHA-256 is `9a212c2accd66881a4360fae9dc0e79d2bf4f4c7b658f0ac23b4ea74caab165f`.
-The source distribution is `dist/explain_bench-0.1.0.tar.gz`.
+Its SHA-256 is `b3a4c3bcba115b3fcd1b9e16bdee4a497dc074ec2073732cf8887abb77e6826e`.
+The source distribution is `dist/explainbench_cli-0.1.0.tar.gz`.
 It contains 156 entries.
-Its SHA-256 is `05ceb37484aa03ce5cffde8bd45c22967125b6e757c5bbaefcc1d30b9da47fcc`.
+Its SHA-256 is `76c0d213aa9a863c5535db5085a7dc64c0b704cb70c653c3d29e844b7dd02ad1`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
@@ -813,7 +813,7 @@ uv run --group release twine check --strict dist/*
 Inspect the wheel before release:
 
 ```bash
-unzip -l dist/explain_bench-*.whl
+unzip -l dist/explainbench_cli-*.whl
 ```
 
 Do not mark the local builder as package-ready until a builder stage works from that installed wheel outside the repository.

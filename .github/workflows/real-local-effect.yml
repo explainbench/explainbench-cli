@@ -36,7 +36,7 @@ jobs:
           uv venv --python 3.12 .real-wheel-venv
           uv pip install \
             --python .real-wheel-venv/bin/python \
-            dist/explain_bench-*.whl \
+            dist/explainbench_cli-*.whl \
             "pytest>=8.4,<10"
 
       - name: Show Docker information

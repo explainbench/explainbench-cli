@@ -83,7 +83,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: testpypi
-      url: https://test.pypi.org/p/explain-bench
+      url: https://test.pypi.org/p/explainbench-cli
     permissions:
       id-token: write
 
@@ -132,13 +132,13 @@ jobs:
               --no-deps \
               --only-binary=:all: \
               --dest downloaded/wheel \
-              "explain-bench==${PACKAGE_VERSION}" \
+              "explainbench-cli==${PACKAGE_VERSION}" \
               && python -m pip download \
               --index-url https://test.pypi.org/simple/ \
               --no-deps \
               --no-binary=:all: \
               --dest downloaded/sdist \
-              "explain-bench==${PACKAGE_VERSION}"; then
+              "explainbench-cli==${PACKAGE_VERSION}"; then
               exit 0
             fi
             sleep 10
