@@ -365,7 +365,7 @@ A phase is complete only when all required checks and acceptance criteria pass.
 | 5 | Copy execution and tracer core | `complete` | Track, trace, inspect, tracer, and plugins import successfully. |
 | 6 | Configure one wheel | `complete` | The wheel contains every mapped package and required resource. |
 | 7 | Migrate and pass fast tests | `complete` | All fast tests pass in the new repository. |
-| 8 | Add clean-wheel tests | `complete` | Checker, resources, mocked evaluation, and the first builder stage pass outside the repository. |
+| 8 | Add clean-wheel tests | `complete` | Checker, resources, mocked lite and full evaluation, direct task selection, checkpoint behavior, model retries, and the first builder stage pass outside the repository. |
 | 9 | Run unpaid real validation | `complete` | Real scenarios `S01` through `S07` complete. |
 | 10 | Add paid-work persistence | `complete` | Raw prompts and responses are durable and resumable. |
 | 11 | Complete one real local-effect workflow | `complete` | A generated local-effect artifact was evaluated successfully. |
@@ -683,6 +683,13 @@ Each wheel test must:
 - [x] Confirm that `explainbench checker` works.
 - [x] Confirm that all shared intent resources load.
 - [x] Confirm that mocked lite evaluation works.
+- [x] Confirm that mocked full evaluation loads staged effect artifacts.
+- [x] Confirm that direct task selection works.
+- [x] Confirm that evaluation writes a versioned result.
+- [x] Confirm that compatible evaluation checkpoints resume.
+- [x] Confirm that malformed and incompatible checkpoints are rejected.
+- [x] Confirm that failed evaluation instances can resume.
+- [x] Confirm that temporary model failures use the configured retry limit.
 - [x] Confirm that all ten local stages list.
 - [x] Confirm that `identify-patched-functions` completes.
 - [x] Confirm that the first stage can resume without repeating work.
@@ -1286,6 +1293,29 @@ Identify the ExplainBench Team as the project copyright holder.
 Preserve the complete SWE-bench author copyright and MIT terms in a separate third-party notice.
 
 Next action: Complete the remaining non-editable-wheel validation and run the manual Docker workflow in the separate repository.
+
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Expanded installed-wheel evaluation coverage.
+Generated each evaluation submission and effect artifact inside the temporary run directory.
+Added mocked full evaluation, direct task selection, versioned result writing, compatible resume, malformed and incompatible checkpoint rejection, failed-instance recovery, and model-adapter retry checks.
+Updated the package readiness documentation to distinguish the validated evaluator package boundary from pending real model-backed validation.
+
+Checks: The focused installed-wheel evaluation suite reported 8 passed.
+The complete isolated-wheel suite reported 11 passed.
+The complete non-wheel suite reported 139 passed and 7 skipped.
+The combined local suite therefore reports 150 passed and 7 skipped.
+
+Problems: Local-builder stages 2 through 10 have not run from a non-editable wheel.
+The real unpaid Docker workflow and a complete model-backed workflow have not run from a non-editable wheel.
+
+Decisions: Use deterministic model doubles for installed-wheel package-boundary tests.
+Keep real provider and Docker validation in separate opt-in workflows.
+Generate evaluation runtime inputs outside the source checkout.
+
+Next action: Add installed-wheel coverage for local-builder stages 2 through 10, then run the manual real Docker workflow.
 
 ## Progress log template
 

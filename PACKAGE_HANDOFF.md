@@ -11,8 +11,8 @@ This document covers the package implementation only.
 It does not explain the research purpose of ExplainBench.
 
 The feature implementation for the agreed `0.1.0` scope is complete.
-Package readiness is confirmed for the checker, shared resources, mocked lite evaluation, and the first local-builder stage.
-Full evaluator and local-builder validation from a non-editable wheel remains in progress.
+Package readiness is confirmed for the checker, shared resources, mocked evaluation, evaluation checkpoints, and the first local-builder stage.
+Real model-backed evaluator validation and complete local-builder validation from a non-editable wheel remain in progress.
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
 The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
 The package is not ready for a public release until the remaining non-editable-wheel validation passes.
@@ -35,10 +35,10 @@ These terms keep repository implementation status separate from release status.
 | Area | Status | Current evidence |
 |---|---|---|
 | Submission schema and checker | Implemented and package-ready | The checker works from the built wheel with its runtime dependencies available. |
-| Evaluation engine | Implemented and partly package-ready | Mocked lite evaluation passes from a non-editable wheel, while full and selected-task wheel execution remain untested. |
+| Evaluation engine | Implemented and package-ready for mocked package-boundary validation | Lite, full, and selected-task evaluation pass from a non-editable wheel and write versioned results. |
 | Shared intent resources | Implemented and package-ready | The wheel contains both context files, both ground-truth files, and all 297 supported instance IDs. |
-| Effect artifact loading | Implemented | Fast tests cover local and end-to-end effect artifact loading, but clean-wheel evaluation currently covers intent tasks only. |
-| Evaluation checkpoints | Implemented | Fast tests cover compatible resume and checkpoint validation. |
+| Effect artifact loading | Implemented and package-ready | Full and selected-task clean-wheel evaluation load staged local and end-to-end effect artifacts. |
+| Evaluation checkpoints | Implemented and package-ready | Clean-wheel tests cover compatible resume, malformed checkpoint rejection, semantic incompatibility rejection, retained failures, and successful retry. |
 | Local-effect question-builder CLI | Implemented and partly package-ready | The installed wheel lists all ten stages and completes and resumes the first canonical stage. |
 | Local-effect scientific stage wrappers | Implemented, with wheel validation incomplete | The wheel contains all canonical modules, but stages 2 through 10 have not run from a non-editable wheel. |
 | Local-effect real-data validation | Validated from an editable installation | Real scenarios `S01` through `S07` pass with Docker and inference disabled. |
@@ -49,10 +49,10 @@ These terms keep repository implementation status separate from release status.
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
 | Public package release | Release pending | Fast and wheel-smoke workflows pass on GitHub, but complete non-editable-wheel validation remains open. |
 
-The latest recorded complete local test result on 2026-07-24 was:
+The latest recorded complete local test result on 2026-07-27 was:
 
 ```text
-143 passed, 7 skipped
+150 passed, 7 skipped
 ```
 
 The seven skipped tests are the opt-in real local-effect tests.
@@ -343,8 +343,9 @@ The source implementation and fast tests cover:
 - Progress reporting.
 - Resume checkpoints.
 
-The clean-wheel test builds and installs the wheel outside the repository.
-It loads all shared intent resources and runs a mocked lite evaluation.
+The clean-wheel suite builds and installs the wheel outside the repository.
+It generates its evaluation inputs in a temporary directory and runs mocked lite, full, and selected-task evaluations through the installed CLI code.
+It verifies versioned result writing, compatible resume, malformed and incompatible checkpoint rejection, failed-instance recovery, and temporary model-request retries.
 The wheel audit confirmed that all four shared intent files and all 297 instance IDs are present.
 
 The separate package does not install the historical top-level `evaluation` package.
@@ -669,8 +670,8 @@ Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
 The exact fast-CI command reported 139 passed and 7 skipped.
-The exact wheel-smoke command reported 4 passed.
-The complete local suite reported 143 passed and 7 skipped.
+The exact wheel-smoke command reported 11 passed.
+The complete local suite reported 150 passed and 7 skipped.
 The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with the package CLI.
 
 ## Known package gaps
@@ -681,7 +682,6 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Remaining release validation
 
-- Full and selected-task evaluation have not run from a non-editable wheel.
 - Local-builder stages 2 through 10 have not run from a non-editable wheel.
 - The real unpaid Docker workflow has not run from a non-editable wheel on a GitHub-hosted runner.
 - The complete model-backed workflow has not run from a non-editable wheel.
@@ -720,7 +720,7 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 1. Push the current documentation and metadata changes to the separate repository.
 2. Confirm that the automatic fast and wheel-smoke workflows still pass.
-3. Expand the isolated-wheel suite to cover full evaluation, selected tasks, checkpoints, and all ten builder stages.
+3. Expand the isolated-wheel suite to cover local-builder stages 2 through 10.
 4. Run the manual unpaid Docker workflow from the non-editable wheel.
 5. Run one complete model-backed workflow from the non-editable wheel.
 6. Build and inspect the final release candidate.
@@ -749,8 +749,8 @@ Current evidence does not yet satisfy the full list.
 - The opt-in real integration result is recorded.
 - Package installation, Docker, disk, network, credentials, runtime, and cleanup requirements are documented.
 
-The checker, shared resources, mocked lite evaluation, and first local-builder stage satisfy their installed-wheel criteria.
-The complete evaluator and local-builder workflows still require non-editable-wheel validation.
+The checker, shared resources, mocked evaluator package boundary, and first local-builder stage satisfy their installed-wheel criteria.
+Real model-backed evaluator validation and the complete local-builder workflow still require non-editable-wheel validation.
 These criteria do not replace the remaining public-release requirement for final GitHub-hosted validation.
 
 ## Verification commands
