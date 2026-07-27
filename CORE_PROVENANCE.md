@@ -288,26 +288,35 @@ Phase 12 confirmed these package metadata values:
 The remaining direct dependency without an exact version was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
 
-Three GitHub Actions workflows are present:
+Six GitHub Actions workflows are present:
 
 - Fast tests for pushes and pull requests.
 - Isolated wheel-smoke tests for pushes and pull requests.
+- Wheel and source-distribution checks for pushes and pull requests.
 - Manual unpaid real local-effect validation with Docker.
+- Manual TestPyPI trusted publishing and downloaded-artifact verification.
+- Tag-triggered production PyPI trusted publishing.
 
 Verification:
 
 - The exact fast-CI command reported 139 passed and 7 skipped.
-- The exact wheel-smoke command reported 4 passed.
-- The complete local suite reported 143 passed and 7 skipped.
+- The exact wheel-smoke command reported 13 passed.
+- The complete local suite reported 152 passed and 7 skipped.
 - The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds.
-- The provisional wheel contains 108 files.
-- It contains all expected packages, resources, and entry points.
-- It contains no tests, examples, logs, results, caches, or build directories.
-- Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8`.
+- The complete seven-scenario real Docker workflow passed from a non-editable wheel on a GitHub-hosted runner.
+- The release-candidate wheel contains 108 files.
+- The source distribution contains 156 entries.
+- The wheel contains all expected packages, resources, and entry points.
+- The wheel contains no tests, examples, logs, results, caches, or build directories.
+- The local wheel SHA-256 is `b3a4c3bcba115b3fcd1b9e16bdee4a497dc074ec2073732cf8887abb77e6826e`.
+- The local source-distribution SHA-256 is `76c0d213aa9a863c5535db5085a7dc64c0b704cb70c653c3d29e844b7dd02ad1`.
+- TestPyPI publication and downloaded-artifact verification pass.
 
 The separate repository exists.
-The fast-test and wheel-smoke workflows pass in that repository.
-The manual real Docker workflow has not run there.
+All automatic workflows pass in that repository.
+The production PyPI environment requires a reviewer.
+The production trusted publisher is configured.
+Production publication has not occurred.
 
 The real-test fixture prefers the `explainbench` executable beside the Python interpreter that runs pytest.
 This prevents an outer development environment from silently selecting another repository's installation.

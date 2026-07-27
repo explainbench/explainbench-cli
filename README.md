@@ -238,7 +238,8 @@ See [PACKAGE_HANDOFF.md](PACKAGE_HANDOFF.md) for current implementation and vali
 ## Development state
 
 The package extraction and local validation are complete.
-Do not publish a public package release until the release candidate passes the required CI workflows in this repository.
+The release candidate passes the required CI workflows and TestPyPI downloaded-artifact validation.
+Production PyPI trusted publishing is configured and awaits the `v0.1.0` release tag.
 
 ## License
 

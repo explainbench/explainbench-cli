@@ -48,7 +48,7 @@ These terms keep repository implementation status separate from release status.
 | Model-backed local-effect workflow | Package-ready | The installed wheel generated, loaded, and evaluated an artifact for `sympy__sympy-15349`, then reused all ten stages without a second candidate request. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
-| Public package release | Production release pending | TestPyPI trusted publishing and downloaded-registry validation pass; production PyPI publication has not occurred. |
+| Public package release | Release ready | TestPyPI trusted publishing, downloaded-registry validation, production publisher configuration, and the protected production environment are complete; production publication has not occurred. |
 
 The latest recorded complete local test result on 2026-07-27 was:
 
@@ -658,6 +658,8 @@ It also supports a verification-only run for an immutable version that is alread
 The production workflow accepts only a `vVERSION` tag that matches `project.version`.
 Its upload job uses the protected `pypi` GitHub environment and trusted publishing.
 The TestPyPI workflow published `0.1.0` and its corrected verification-only run passed.
+The production PyPI environment requires approval from the configured reviewer.
+The production trusted publisher is configured for `release.yml` and the `pypi` environment.
 The production publishing workflow has not run.
 
 The fast-test and wheel-smoke workflows passed on GitHub for commit `0cfa7497a942798aafeea6e5566bc886e966fde2` on 2026-07-27.
@@ -714,7 +716,8 @@ The fresh model-backed acceptance used a separately built wheel with SHA-256 `47
 
 ### Remaining release validation
 
-- Configure the `pypi` GitHub environment and PyPI trusted publisher before the production release.
+- No pre-publication validation remains.
+- Confirm the production project page and a clean registry installation after publication.
 
 ### Validation gaps
 
@@ -746,10 +749,10 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 ### Priority 1: Publish `0.1.0`
 
-1. Configure the PyPI trusted publisher for `.github/workflows/release.yml` and environment `pypi`.
-2. Review the final wheel, source-distribution, and TestPyPI checksums.
-3. Create and push the `v0.1.0` release tag.
-4. Approve the protected production publishing job.
+1. Review the final wheel, source-distribution, and TestPyPI checksums.
+2. Create and push the `v0.1.0` release tag.
+3. Approve the protected production publishing job.
+4. Confirm the production project page and install the published release in a clean Python 3.12 environment.
 
 ### Priority 2: Decide the end-to-end builder scope
 

@@ -1532,6 +1532,26 @@ Keep TestPyPI publication and verification separable for immutable releases.
 
 Next action: Configure the production PyPI trusted publisher and create the `v0.1.0` release tag.
 
+Date: 2026-07-27.
+
+Phase: Production release readiness.
+
+Completed: Configured the production `pypi` GitHub environment.
+Added the required reviewer with self-review permitted.
+Configured the production PyPI pending trusted publisher for `explainbench/explainbench-cli`, workflow `release.yml`, and environment `pypi`.
+
+Checks: The GitHub environment API reports the required-reviewer protection rule.
+All automatic workflows pass for standalone commit `f3ae47bcc4df33f510caa8d2a2d656c7bf98498f`.
+The final verification-only TestPyPI workflow passed without the deprecated Node.js action warning.
+The `v0.1.0` tag does not exist locally or on the standalone remote.
+
+Problems: No pre-publication blocker remains.
+
+Decisions: Require a deliberate environment approval before production upload.
+Keep the production tag equal to `v` followed by `project.version`.
+
+Next action: Create and push `v0.1.0`, approve the protected production job, then verify the production project and clean installation.
+
 ## Progress log template
 
 Add one entry after each work session:
