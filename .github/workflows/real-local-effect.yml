@@ -28,11 +28,26 @@ jobs:
           version: "0.11.31"
           enable-cache: true
 
-      - name: Install locked development dependencies
-        run: uv sync --locked --dev
+      - name: Build the wheel
+        run: uv build --wheel --out-dir dist
+
+      - name: Install the wheel in an isolated environment
+        run: |
+          uv venv --python 3.12 .real-wheel-venv
+          uv pip install \
+            --python .real-wheel-venv/bin/python \
+            dist/explain_bench-*.whl \
+            "pytest>=8.4,<10"
 
       - name: Show Docker information
         run: docker info
 
       - name: Run real unpaid local-effect tests
-        run: uv run pytest tests/real_local_effect -ra
+        env:
+          EXPLAINBENCH_REAL_EXECUTABLE: >-
+            ${{ github.workspace }}/.real-wheel-venv/bin/explainbench
+          PYTHONNOUSERSITE: "1"
+        run: >-
+          env -u PYTHONPATH
+          .real-wheel-venv/bin/python -P -m pytest
+          tests/real_local_effect -ra
