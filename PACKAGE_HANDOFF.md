@@ -11,11 +11,11 @@ This document covers the package implementation only.
 It does not explain the research purpose of ExplainBench.
 
 The feature implementation for the agreed `0.1.0` scope is complete.
-Package readiness is confirmed for the checker, shared resources, mocked evaluation, evaluation checkpoints, and mocked execution of all ten local-builder stages.
-Real model-backed evaluator and local-builder validation from a non-editable wheel remain in progress.
+Package readiness is confirmed for the checker, shared resources, evaluation, evaluation checkpoints, and all ten local-builder stages.
+The real unpaid Docker and model-backed workflows pass from a non-editable wheel.
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
 The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
-The package is not ready for a public release until the remaining non-editable-wheel validation passes.
+The package satisfies the agreed `0.1.0` release-validation requirements.
 The manual GitHub-hosted real Docker workflow passed from the non-editable wheel.
 
 ## Status terms
@@ -26,6 +26,7 @@ This document uses the following terms:
 - **Package-ready** means that the feature works from an installed wheel outside the repository.
 - **Partly package-ready** means that some installed-wheel paths pass, but the complete feature has not run from a non-editable wheel.
 - **Release pending** means that the package implementation is complete, but a repository-level release requirement remains open.
+- **Release ready** means that the agreed implementation and validation requirements pass, but publication has not occurred.
 - **Out of initial scope** means that the feature is not part of the agreed `0.1.0` package implementation.
 
 These terms keep repository implementation status separate from release status.
@@ -42,12 +43,12 @@ These terms keep repository implementation status separate from release status.
 | Local-effect question-builder CLI | Implemented and package-ready for mocked package-boundary validation | The installed wheel completes and resumes all ten stages with deterministic external-command doubles. |
 | Local-effect scientific stage wrappers | Implemented and package-ready for mocked package-boundary validation | All ten installed-wheel stage wrappers exchange and validate their expected artifacts. |
 | Local-effect real-data validation | Package-ready for unpaid Docker validation | Real scenarios `S01` through `S07` pass from a non-editable wheel on a GitHub-hosted runner. |
-| Local-effect wheel execution | Partly package-ready | All stages pass with external-command doubles, the first stage passes with real Git operations, and the unpaid real workflow passes from the wheel. |
+| Local-effect wheel execution | Package-ready | The unpaid real workflow passes from the wheel, and the complete model-backed builder finishes and resumes all ten stages. |
 | Paid inference persistence | Implemented and validated in repository tests | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
-| Model-backed local-effect workflow | Validated from an editable installation | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
+| Model-backed local-effect workflow | Package-ready | The installed wheel generated, loaded, and evaluated an artifact for `sympy__sympy-15349`, then reused all ten stages without a second candidate request. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
-| Public package release | Release pending | Fast and wheel-smoke workflows pass on GitHub, but complete non-editable-wheel validation remains open. |
+| Public package release | Release ready | Required local, GitHub-hosted, Docker, installed-wheel, and model-backed validation passes; PyPI publication has not occurred. |
 
 The latest recorded complete local test result on 2026-07-27 was:
 
@@ -666,7 +667,7 @@ It is now pinned to the locked version `4.1.2`.
 
 The final local release-candidate wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
 It contains 108 files.
-Its SHA-256 is `b70b6d1d2166d6de4d0a23fbf485e3139a9003cbb6604ac33d520e3736501210`.
+Its SHA-256 is `7e5430fa5d208358d0c47367b2fa1552848cc7d95649578e52ee56ab609af842`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
@@ -683,13 +684,12 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Remaining release validation
 
-- The complete model-backed workflow has not run from a non-editable wheel.
+- No required `0.1.0` validation remains.
 
 ### Validation gaps
 
 - Python 3.14 installation has not been validated.
 - Interruption, retry exhaustion, corruption, and semantic invalidation have not been validated with real external processes.
-- The complete real workflow has not run from a non-editable wheel installation.
 
 ### Feature gaps
 
@@ -707,18 +707,17 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 - All dependencies are mandatory and exactly pinned.
 - Optional dependency groups for evaluation-only and builder workflows do not exist.
 
-These metadata items do not block repository development.
-They should be complete before a public package release.
+These items are nonblocking follow-up improvements.
 
 ## Recommended work order
 
 The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTION_PLAN.md](EXPLAINBENCH_CLI_EXTRACTION_PLAN.md).
 
-### Priority 1: Complete release automation
+### Priority 1: Publish `0.1.0`
 
-1. Push the current documentation and metadata changes to the separate repository.
-2. Confirm that the automatic fast and wheel-smoke workflows still pass.
-3. Run one complete model-backed workflow from the non-editable wheel.
+1. Review the final release evidence and wheel checksum.
+2. Create the `0.1.0` release tag.
+3. Publish the confirmed wheel to PyPI.
 
 ### Priority 2: Decide the end-to-end builder scope
 
@@ -729,7 +728,7 @@ Do not force both pipelines to use the same scientific stages.
 ## Package-ready acceptance criteria
 
 Use the following criteria to mark the complete package as package-ready.
-Current evidence does not yet satisfy the full list.
+Current evidence satisfies the full list.
 
 - A clean wheel contains every module and resource required by the selected workflow.
 - `explainbench --help` works outside the repository.
@@ -744,9 +743,8 @@ Current evidence does not yet satisfy the full list.
 - The opt-in real integration result is recorded.
 - Package installation, Docker, disk, network, credentials, runtime, and cleanup requirements are documented.
 
-The checker, shared resources, mocked evaluator package boundary, and mocked ten-stage local-builder package boundary satisfy their installed-wheel criteria.
-Real model-backed evaluator and local-builder workflows still require non-editable-wheel validation.
-These criteria do not replace the remaining public-release requirement for final GitHub-hosted validation.
+The checker, resources, evaluator, checkpoints, Docker workflow, and complete local builder satisfy their installed-wheel criteria.
+The model-backed result completed with no failed instance, and the repeated builder command reused all ten stages.
 
 ## Verification commands
 

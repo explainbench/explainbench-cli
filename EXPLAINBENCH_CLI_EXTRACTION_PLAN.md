@@ -1352,7 +1352,7 @@ Checks: GitHub fast tests and wheel-smoke tests passed for standalone commit `0c
 The GitHub-hosted real workflow reported 7 passed in 368.23 seconds from the isolated wheel.
 The local wheel contains 108 files, the expected packages and resources, MIT metadata, license notices, console entry point, and pytest entry point.
 The installed final artifact reports version `0.1.0` and shows all public command groups.
-The post-validation release-candidate wheel has SHA-256 `b70b6d1d2166d6de4d0a23fbf485e3139a9003cbb6604ac33d520e3736501210`.
+The post-validation release-candidate wheel has SHA-256 `7e5430fa5d208358d0c47367b2fa1552848cc7d95649578e52ee56ab609af842`.
 
 Problems: A complete model-backed workflow has not run from a non-editable wheel.
 The paid command requires explicit approval to send submission-derived prompt data to OpenAI.
@@ -1361,6 +1361,36 @@ Decisions: Make the GitHub-hosted real workflow install the wheel directly.
 Keep paid model validation outside GitHub Actions.
 
 Next action: Obtain explicit approval for the model data transfer and run the complete model-backed workflow.
+
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Received explicit approval for the model data transfer.
+Installed the final wheel in an isolated temporary environment.
+Ran model-backed candidate generation for `sympy__sympy-15349`.
+Completed candidate inspection, validation, answer-choice construction, and artifact export.
+Loaded the published artifact through the installed evaluator.
+Ran one real `local.effect` evaluation with `gpt-5-mini-2025-08-07`.
+Repeated the complete builder command with `--resume`.
+Copied the private validation workspace, artifacts, and result into the ignored `.explainbench/release-validation/wheel-model-2026-07-27` evidence directory.
+
+Checks: Candidate generation used `gpt-5.2-2025-12-11` with medium reasoning effort.
+The audit contains a 15,105-byte prompt and one selected raw response.
+The prompt and response sizes and SHA-256 checksums match the audit manifest.
+All ten builder stages completed or reused successfully.
+The exported files load as one typed `LocalEffectContext` and one typed `AnswerGroundTruth`.
+The evaluation processed one instance with no failure and removed its checkpoint.
+It used 1,000 prompt tokens and 1,107 completion tokens.
+The model answer scored `0.0`; this is an answer-quality result and not an integration failure.
+The repeated builder command reported `reused=1` for every stage and made no second candidate request.
+
+Problems: No required `0.1.0` validation remains.
+
+Decisions: Treat model accuracy separately from package integration success.
+Keep the paid validation evidence private and ignored by Git.
+
+Next action: Review the release evidence, create the `0.1.0` tag, and publish the confirmed wheel to PyPI.
 
 ## Progress log template
 
@@ -1402,7 +1432,6 @@ Phase 10 is complete.
 
 Phase 11 is complete.
 
-Phase 12 is in progress.
+Phase 12 is complete.
 
-Obtain explicit approval for the model data transfer.
-Then run the complete model-backed workflow from the installed wheel.
+Review the release evidence before creating the `0.1.0` tag and publishing to PyPI.
