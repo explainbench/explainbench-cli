@@ -48,7 +48,7 @@ These terms keep repository implementation status separate from release status.
 | Model-backed local-effect workflow | Package-ready | The installed wheel generated, loaded, and evaluated an artifact for `sympy__sympy-15349`, then reused all ten stages without a second candidate request. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
-| Public package release | Registry validation pending | Local artifacts and publishing automation pass their available checks; TestPyPI upload and downloaded-registry validation have not occurred. |
+| Public package release | Production release pending | TestPyPI trusted publishing and downloaded-registry validation pass; production PyPI publication has not occurred. |
 
 The latest recorded complete local test result on 2026-07-27 was:
 
@@ -654,9 +654,11 @@ The manual workflow copies the real tests and submission into a temporary direct
 The installed wheel executable also uses that temporary directory as its working directory.
 The manual TestPyPI workflow uses the `testpypi` GitHub environment and trusted publishing.
 It downloads both uploaded formats from TestPyPI and repeats the installed-artifact smoke checks.
+It also supports a verification-only run for an immutable version that is already present.
 The production workflow accepts only a `vVERSION` tag that matches `project.version`.
 Its upload job uses the protected `pypi` GitHub environment and trusted publishing.
-Neither publishing workflow has been dispatched.
+The TestPyPI workflow published `0.1.0` and its corrected verification-only run passed.
+The production publishing workflow has not run.
 
 The fast-test and wheel-smoke workflows passed on GitHub for commit `0cfa7497a942798aafeea6e5566bc886e966fde2` on 2026-07-27.
 The manual real Docker workflow also passed for that commit.
@@ -694,6 +696,10 @@ It contains no tests, examples, logs, results, generated caches, or build direct
 The wheel and source distribution passed `twine check --strict`.
 Each format installed in a separate clean Python 3.12 environment.
 Each installed artifact passed CLI help, checker, mocked evaluator, builder-stage listing, license metadata, and `site-packages` boundary checks.
+The TestPyPI wheel has SHA-256 `7dfe90acc26cc4a924dbf1422e35da660a7d6aab2aca4127d94ba19c158e8328`.
+The TestPyPI source distribution has SHA-256 `3909a7212d35d4722f9e7e27825cc754e33ee3fb1d3846352fe9f8423d1d56d1`.
+Both TestPyPI hashes were verified against the registry metadata before installation.
+Both downloaded TestPyPI artifacts passed the installed-artifact smoke checks.
 The exact fast-CI command reported 139 passed and 7 skipped.
 The exact wheel-smoke command reported 13 passed.
 The complete local suite reported 152 passed and 7 skipped.
@@ -708,9 +714,6 @@ The fresh model-backed acceptance used a separately built wheel with SHA-256 `47
 
 ### Remaining release validation
 
-- Configure the `testpypi` GitHub environment and TestPyPI trusted publisher.
-- Upload the validated artifacts to TestPyPI.
-- Download both formats from TestPyPI and run the prepared smoke checks.
 - Configure the `pypi` GitHub environment and PyPI trusted publisher before the production release.
 
 ### Validation gaps
@@ -743,12 +746,10 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 ### Priority 1: Publish `0.1.0`
 
-1. Configure the TestPyPI trusted publisher for `.github/workflows/testpypi.yml` and environment `testpypi`.
-2. Run the manual TestPyPI workflow and confirm its downloaded-artifact checks.
-3. Configure the PyPI trusted publisher for `.github/workflows/release.yml` and environment `pypi`.
-4. Review the final wheel and source-distribution checksums.
-5. Create and push the `v0.1.0` release tag.
-6. Approve the protected production publishing job.
+1. Configure the PyPI trusted publisher for `.github/workflows/release.yml` and environment `pypi`.
+2. Review the final wheel, source-distribution, and TestPyPI checksums.
+3. Create and push the `v0.1.0` release tag.
+4. Approve the protected production publishing job.
 
 ### Priority 2: Decide the end-to-end builder scope
 

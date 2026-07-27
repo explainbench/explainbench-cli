@@ -1507,6 +1507,31 @@ Keep `explainbench` as the import and executable name.
 
 Next action: Configure the `explainbench-cli` TestPyPI pending publisher and run the manual publishing workflow.
 
+Date: 2026-07-27.
+
+Phase: TestPyPI acceptance.
+
+Completed: Published `explainbench-cli==0.1.0` to TestPyPI through the configured trusted publisher.
+Replaced the source-distribution download command with a registry JSON downloader that verifies each artifact against its published SHA-256 digest.
+Added a verification-only workflow option so immutable published versions can be checked again without another upload.
+Updated the artifact transfer actions to their current Node.js 24 versions.
+
+Checks: The TestPyPI publish job succeeded in GitHub run `30246255512`.
+The corrected verification-only workflow passed in GitHub run `30249013714`.
+The TestPyPI wheel SHA-256 is `7dfe90acc26cc4a924dbf1422e35da660a7d6aab2aca4127d94ba19c158e8328`.
+The TestPyPI source-distribution SHA-256 is `3909a7212d35d4722f9e7e27825cc754e33ee3fb1d3846352fe9f8423d1d56d1`.
+Both downloaded artifacts installed in clean Python 3.12 environments and passed CLI, checker, mocked evaluator, builder, metadata, license, and package-origin smoke checks.
+
+Problems: The first verification attempted to prepare source-distribution metadata using TestPyPI as its only dependency index.
+That failed because TestPyPI does not provide Setuptools.
+No package or trusted-publishing failure occurred.
+
+Decisions: Download registry artifacts directly from their registry metadata.
+Verify registry digests before installation.
+Keep TestPyPI publication and verification separable for immutable releases.
+
+Next action: Configure the production PyPI trusted publisher and create the `v0.1.0` release tag.
+
 ## Progress log template
 
 Add one entry after each work session:
