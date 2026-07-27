@@ -8,7 +8,7 @@ The package is ready for repository development and release-candidate validation
 
 ## Installation
 
-ExplainBench requires Python 3.12 or later.
+ExplainBench supports Python 3.12.
 Clone the repository and install the package:
 
 ```bash
@@ -160,14 +160,18 @@ uv sync --locked --dev
 uv run pytest -ra
 ```
 
-The repository includes three GitHub Actions workflows:
+The repository includes six GitHub Actions workflows:
 
 - Fast tests run on pushes and pull requests without clean-wheel or real Docker tests.
 - Wheel smoke tests build and install the wheel in an isolated environment.
+- Distribution checks build, validate, install, and smoke-test the wheel and source distribution.
 - Real local-effect validation is a manual unpaid Docker workflow.
+- TestPyPI publishing is a manual trusted-publishing workflow with downloaded-artifact verification.
+- Production publishing is tag-triggered and protected by the `pypi` GitHub environment.
 
 The workflows run from the standalone `explainbench-cli` repository.
 The GitHub-hosted real workflow builds and installs the wheel before it runs the seven unpaid Docker scenarios.
+The publishing workflows require configured GitHub environments and PyPI trusted publishers.
 
 ## Repository model
 

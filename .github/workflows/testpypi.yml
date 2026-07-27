@@ -1,0 +1,169 @@
+name: Publish to TestPyPI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: "0.11.31"
+          enable-cache: true
+
+      - name: Install locked release dependencies
+        run: uv sync --locked --group release
+
+      - name: Read the package version
+        id: version
+        run: |
+          version="$(
+            python -c \
+              'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])'
+          )"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build the wheel and source distribution
+        run: uv build --out-dir dist
+
+      - name: Validate distribution metadata
+        run: uv run --group release twine check --strict dist/*
+
+      - name: Smoke-test both installed artifacts
+        env:
+          SMOKE_SCRIPT: >-
+            ${{ github.workspace }}/tests/release_artifact_smoke.py
+        run: |
+          for artifact in dist/*.whl dist/*.tar.gz; do
+            artifact_name="$(basename "${artifact}")"
+            environment="${RUNNER_TEMP}/environment-${artifact_name}"
+            run_root="${RUNNER_TEMP}/run-${artifact_name}"
+            uv venv --python 3.12 "${environment}"
+            uv pip install \
+              --python "${environment}/bin/python" \
+              "${GITHUB_WORKSPACE}/${artifact}"
+            mkdir -p "${run_root}"
+            (
+              cd "${run_root}"
+              env -u PYTHONPATH \
+                PYTHONNOUSERSITE=1 \
+                "${environment}/bin/python" \
+                -P "${SMOKE_SCRIPT}"
+            )
+          done
+
+      - name: Store the validated distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-distributions
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/explain-bench
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Retrieve the validated distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist/
+
+      - name: Publish to TestPyPI with trusted publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  verify:
+    needs:
+      - build
+      - publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: "0.11.31"
+          enable-cache: true
+
+      - name: Download both uploaded artifacts from TestPyPI
+        env:
+          PACKAGE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          mkdir -p downloaded/wheel downloaded/sdist
+          for attempt in $(seq 1 12); do
+            if python -m pip download \
+              --index-url https://test.pypi.org/simple/ \
+              --no-deps \
+              --only-binary=:all: \
+              --dest downloaded/wheel \
+              "explain-bench==${PACKAGE_VERSION}" \
+              && python -m pip download \
+              --index-url https://test.pypi.org/simple/ \
+              --no-deps \
+              --no-binary=:all: \
+              --dest downloaded/sdist \
+              "explain-bench==${PACKAGE_VERSION}"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          exit 1
+
+      - name: Smoke-test the TestPyPI artifacts
+        env:
+          SMOKE_SCRIPT: >-
+            ${{ github.workspace }}/tests/release_artifact_smoke.py
+        run: |
+          for artifact in downloaded/wheel/* downloaded/sdist/*; do
+            artifact_name="$(basename "${artifact}")"
+            environment="${RUNNER_TEMP}/environment-${artifact_name}"
+            run_root="${RUNNER_TEMP}/run-${artifact_name}"
+            uv venv --python 3.12 "${environment}"
+            uv pip install \
+              --python "${environment}/bin/python" \
+              "${GITHUB_WORKSPACE}/${artifact}"
+            mkdir -p "${run_root}"
+            (
+              cd "${run_root}"
+              env -u PYTHONPATH \
+                PYTHONNOUSERSITE=1 \
+                "${environment}/bin/python" \
+                -P "${SMOKE_SCRIPT}"
+            )
+          done

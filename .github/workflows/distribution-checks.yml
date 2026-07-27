@@ -1,0 +1,67 @@
+name: Distribution checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  distribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          version: "0.11.31"
+          enable-cache: true
+
+      - name: Install locked release dependencies
+        run: uv sync --locked --group release
+
+      - name: Build the wheel and source distribution
+        run: uv build --out-dir dist
+
+      - name: Validate distribution metadata
+        run: uv run --group release twine check --strict dist/*
+
+      - name: Confirm the distribution file set
+        run: |
+          test "$(find dist -maxdepth 1 -name '*.whl' | wc -l)" -eq 1
+          test "$(find dist -maxdepth 1 -name '*.tar.gz' | wc -l)" -eq 1
+
+      - name: Smoke-test both installed artifacts
+        env:
+          SMOKE_SCRIPT: >-
+            ${{ github.workspace }}/tests/release_artifact_smoke.py
+        run: |
+          for artifact in dist/*.whl dist/*.tar.gz; do
+            artifact_name="$(basename "${artifact}")"
+            environment="${RUNNER_TEMP}/environment-${artifact_name}"
+            run_root="${RUNNER_TEMP}/run-${artifact_name}"
+            uv venv --python 3.12 "${environment}"
+            uv pip install \
+              --python "${environment}/bin/python" \
+              "${GITHUB_WORKSPACE}/${artifact}"
+            mkdir -p "${run_root}"
+            (
+              cd "${run_root}"
+              env -u PYTHONPATH \
+                PYTHONNOUSERSITE=1 \
+                "${environment}/bin/python" \
+                -P "${SMOKE_SCRIPT}"
+            )
+          done

@@ -1449,6 +1449,39 @@ Treat answer quality separately from package integration success.
 
 Next action: Complete the distribution checks before the public registry release.
 
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Limited the supported interpreter range to Python 3.12.
+Added repository and issue metadata.
+Added a locked release dependency group with Twine.
+Added a standalone installed-artifact smoke program for checker, mocked evaluator, builder stage listing, metadata, licenses, and package-origin checks.
+Added automatic wheel and source-distribution validation for pushes and pull requests.
+Added a manual TestPyPI trusted-publishing workflow with registry-download verification.
+Added a tag-triggered production trusted-publishing workflow with version matching and a protected environment.
+Built and retained the corrected wheel and source distribution.
+
+Checks: `uv lock` resolved the Python 3.12-only package and Twine 6.2.0.
+The wheel and source distribution passed `twine check --strict`.
+The wheel contains 108 files and has SHA-256 `9a212c2accd66881a4360fae9dc0e79d2bf4f4c7b658f0ac23b4ea74caab165f`.
+The source distribution contains 156 entries and has SHA-256 `05ceb37484aa03ce5cffde8bd45c22967125b6e757c5bbaefcc1d30b9da47fcc`.
+Neither distribution contains private `.explainbench` evidence, environment files, result directories, or generated Python caches.
+Each format installed in a separate clean Python 3.12 environment.
+Both installations passed checker, mocked evaluator, builder, metadata, license, and `site-packages` smoke checks.
+All workflow YAML files parsed successfully.
+Both TestPyPI and PyPI returned HTTP 404 for the `explain-bench` project endpoint before upload.
+
+Problems: Registry upload and downloaded-registry validation cannot run until the trusted publisher is configured and the user authorizes the upload.
+
+Decisions: Support only Python 3.12 for `0.1.0`.
+Publish both the wheel and source distribution.
+Use separate `testpypi` and `pypi` GitHub environments with trusted publishing.
+Require the production tag to match `project.version`.
+Do not upload during this preparation task.
+
+Next action: Configure the TestPyPI trusted publisher, then dispatch `.github/workflows/testpypi.yml`.
+
 ## Progress log template
 
 Add one entry after each work session:

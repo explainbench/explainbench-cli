@@ -48,7 +48,7 @@ These terms keep repository implementation status separate from release status.
 | Model-backed local-effect workflow | Package-ready | The installed wheel generated, loaded, and evaluated an artifact for `sympy__sympy-15349`, then reused all ten stages without a second candidate request. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
-| Public package release | Release ready | Required local, GitHub-hosted, Docker, installed-wheel, and model-backed validation passes; PyPI publication has not occurred. |
+| Public package release | Registry validation pending | Local artifacts and publishing automation pass their available checks; TestPyPI upload and downloaded-registry validation have not occurred. |
 
 The latest recorded complete local test result on 2026-07-27 was:
 
@@ -66,7 +66,8 @@ The standalone tracer checks also reported 17 inspector before-mode passes, 17 i
 The project uses a `src` package layout.
 The public package is under `src/explainbench`.
 The project version is `0.1.0`.
-The minimum Python version is 3.12.
+The supported Python version is 3.12.
+The package metadata requires `>=3.12,<3.13`.
 The console entry point is:
 
 ```toml
@@ -613,7 +614,7 @@ The bundled evaluation configurations use OpenAI models and read `OPENAI_API_KEY
 
 The complete local-effect builder requires:
 
-- Python 3.12 or later.
+- Python 3.12.
 - A working Docker service.
 - Access to the configured source repository host.
 - Access to Hugging Face for the configured SWE-bench dataset.
@@ -645,11 +646,17 @@ Delete a workspace only after all builder processes stop and its resume and audi
 
 ## Release automation
 
-The separate repository contains three workflows under `.github/workflows`.
+The separate repository contains six workflows under `.github/workflows`.
 Fast tests and wheel-smoke tests run for pushes to `main` and for pull requests.
+Distribution checks build and smoke-test both distribution formats on pushes to `main` and on pull requests.
 The real unpaid local-effect test is a manual Docker workflow.
 The manual workflow copies the real tests and submission into a temporary directory outside the repository before it starts pytest.
 The installed wheel executable also uses that temporary directory as its working directory.
+The manual TestPyPI workflow uses the `testpypi` GitHub environment and trusted publishing.
+It downloads both uploaded formats from TestPyPI and repeats the installed-artifact smoke checks.
+The production workflow accepts only a `vVERSION` tag that matches `project.version`.
+Its upload job uses the protected `pypi` GitHub environment and trusted publishing.
+Neither publishing workflow has been dispatched.
 
 The fast-test and wheel-smoke workflows passed on GitHub for commit `0cfa7497a942798aafeea6e5566bc886e966fde2` on 2026-07-27.
 The manual real Docker workflow also passed for that commit.
@@ -677,10 +684,16 @@ It is now pinned to the locked version `4.1.2`.
 
 The final local release-candidate wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
 It contains 108 files.
-Its SHA-256 is `7e5430fa5d208358d0c47367b2fa1552848cc7d95649578e52ee56ab609af842`.
+Its SHA-256 is `9a212c2accd66881a4360fae9dc0e79d2bf4f4c7b658f0ac23b4ea74caab165f`.
+The source distribution is `dist/explain_bench-0.1.0.tar.gz`.
+It contains 156 entries.
+Its SHA-256 is `05ceb37484aa03ce5cffde8bd45c22967125b6e757c5bbaefcc1d30b9da47fcc`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
+The wheel and source distribution passed `twine check --strict`.
+Each format installed in a separate clean Python 3.12 environment.
+Each installed artifact passed CLI help, checker, mocked evaluator, builder-stage listing, license metadata, and `site-packages` boundary checks.
 The exact fast-CI command reported 139 passed and 7 skipped.
 The exact wheel-smoke command reported 13 passed.
 The complete local suite reported 152 passed and 7 skipped.
@@ -695,11 +708,13 @@ The fresh model-backed acceptance used a separately built wheel with SHA-256 `47
 
 ### Remaining release validation
 
-- No required `0.1.0` validation remains.
+- Configure the `testpypi` GitHub environment and TestPyPI trusted publisher.
+- Upload the validated artifacts to TestPyPI.
+- Download both formats from TestPyPI and run the prepared smoke checks.
+- Configure the `pypi` GitHub environment and PyPI trusted publisher before the production release.
 
 ### Validation gaps
 
-- Python 3.14 installation has not been validated.
 - Interruption, retry exhaustion, corruption, and semantic invalidation have not been validated with real external processes.
 
 ### Feature gaps
@@ -713,7 +728,9 @@ The fresh model-backed acceptance used a separately built wheel with SHA-256 `47
 
 - The package metadata contains the MIT SPDX license expression.
 - The wheel includes the project license and the SWE-bench third-party notice.
-- The author and project homepage metadata are present.
+- The author, homepage, repository, and issue metadata are present.
+- The Python requirement accurately limits support to Python 3.12.
+- Both wheel and source-distribution metadata pass strict validation.
 - The repository examples are intentionally excluded from the wheel.
 - All dependencies are mandatory and exactly pinned.
 - Optional dependency groups for evaluation-only and builder workflows do not exist.
@@ -726,9 +743,12 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 ### Priority 1: Publish `0.1.0`
 
-1. Review the final release evidence and wheel checksum.
-2. Create the `0.1.0` release tag.
-3. Publish the confirmed wheel to PyPI.
+1. Configure the TestPyPI trusted publisher for `.github/workflows/testpypi.yml` and environment `testpypi`.
+2. Run the manual TestPyPI workflow and confirm its downloaded-artifact checks.
+3. Configure the PyPI trusted publisher for `.github/workflows/release.yml` and environment `pypi`.
+4. Review the final wheel and source-distribution checksums.
+5. Create and push the `v0.1.0` release tag.
+6. Approve the protected production publishing job.
 
 ### Priority 2: Decide the end-to-end builder scope
 
@@ -778,13 +798,19 @@ EXPLAINBENCH_RUN_REAL_LOCAL_EFFECT=1 \
 uv run pytest -s tests/real_local_effect/test_s01_s07_real_pipeline.py
 ```
 
-Build a wheel:
+Build the wheel and source distribution:
 
 ```bash
-uv build --wheel
+uv build
 ```
 
-Inspect the wheel before a release:
+Validate their metadata:
+
+```bash
+uv run --group release twine check --strict dist/*
+```
+
+Inspect the wheel before release:
 
 ```bash
 unzip -l dist/explain_bench-*.whl
