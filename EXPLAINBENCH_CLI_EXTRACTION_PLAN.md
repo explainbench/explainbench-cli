@@ -1340,6 +1340,27 @@ Use the opt-in real workflow to validate Docker and real scientific execution.
 
 Next action: Publish this builder coverage and run the manual real Docker workflow from the installed wheel.
 
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Changed the manual real workflow to build and install a non-editable wheel in an isolated environment.
+Published the workflow and dispatched it on the standalone repository.
+Built and inspected a local release-candidate wheel.
+
+Checks: GitHub fast tests and wheel-smoke tests passed for standalone commit `0cfa7497a942`.
+The GitHub-hosted real workflow reported 7 passed in 368.23 seconds from the isolated wheel.
+The local wheel contains 108 files, the expected packages and resources, MIT metadata, license notices, console entry point, and pytest entry point.
+The installed final artifact reports version `0.1.0` and shows all public command groups.
+
+Problems: A complete model-backed workflow has not run from a non-editable wheel.
+The paid command requires explicit approval to send submission-derived prompt data to OpenAI.
+
+Decisions: Make the GitHub-hosted real workflow install the wheel directly.
+Keep paid model validation outside GitHub Actions.
+
+Next action: Obtain explicit approval for the model data transfer, run the complete model-backed workflow, and finalize the wheel checksum.
+
 ## Progress log template
 
 Add one entry after each work session:
@@ -1382,4 +1403,5 @@ Phase 11 is complete.
 
 Phase 12 is in progress.
 
-Complete the required non-editable-wheel validation and run the manual Docker workflow in the separate repository.
+Obtain explicit approval for the model data transfer.
+Then run the complete model-backed workflow from the installed wheel and finalize the release-candidate checksum.

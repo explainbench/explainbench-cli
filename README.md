@@ -167,6 +167,7 @@ The repository includes three GitHub Actions workflows:
 - Real local-effect validation is a manual unpaid Docker workflow.
 
 The workflows run from the standalone `explainbench-cli` repository.
+The GitHub-hosted real workflow builds and installs the wheel before it runs the seven unpaid Docker scenarios.
 
 ## Repository model
 
@@ -207,6 +208,7 @@ The complete suite reports 151 passed and 7 documented opt-in skips.
 The standalone tracer inspector and serializer suites also pass.
 Twelve clean-wheel tests cover the checker, resources, mocked lite and full evaluation, direct task selection, result writing, checkpoint handling, model retries, all ten local-builder stages with mocked external commands, and first-stage execution with real Git operations.
 The opt-in real Docker sequence reports seven passes for scenarios `S01` through `S07`.
+The same seven scenarios passed on a GitHub-hosted runner from a non-editable wheel.
 One complete model-backed local-effect workflow passed for `sympy__sympy-15349`.
 The generated artifact passed typed evaluator loading and one real `local.effect` evaluation.
 The repeated builder command reused all ten stages.

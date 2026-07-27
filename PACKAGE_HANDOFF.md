@@ -16,7 +16,7 @@ Real model-backed evaluator and local-builder validation from a non-editable whe
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
 The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
 The package is not ready for a public release until the remaining non-editable-wheel validation passes.
-The manual GitHub-hosted real Docker workflow must also validate the non-editable wheel.
+The manual GitHub-hosted real Docker workflow passed from the non-editable wheel.
 
 ## Status terms
 
@@ -41,8 +41,8 @@ These terms keep repository implementation status separate from release status.
 | Evaluation checkpoints | Implemented and package-ready | Clean-wheel tests cover compatible resume, malformed checkpoint rejection, semantic incompatibility rejection, retained failures, and successful retry. |
 | Local-effect question-builder CLI | Implemented and package-ready for mocked package-boundary validation | The installed wheel completes and resumes all ten stages with deterministic external-command doubles. |
 | Local-effect scientific stage wrappers | Implemented and package-ready for mocked package-boundary validation | All ten installed-wheel stage wrappers exchange and validate their expected artifacts. |
-| Local-effect real-data validation | Validated from an editable installation | Real scenarios `S01` through `S07` pass with Docker and inference disabled. |
-| Local-effect wheel execution | Partly package-ready | All stages pass with external-command doubles and the first stage passes with real Git operations, while the real unpaid workflow has not run from that wheel. |
+| Local-effect real-data validation | Package-ready for unpaid Docker validation | Real scenarios `S01` through `S07` pass from a non-editable wheel on a GitHub-hosted runner. |
+| Local-effect wheel execution | Partly package-ready | All stages pass with external-command doubles, the first stage passes with real Git operations, and the unpaid real workflow passes from the wheel. |
 | Paid inference persistence | Implemented and validated in repository tests | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
 | Model-backed local-effect workflow | Validated from an editable installation | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
@@ -644,8 +644,9 @@ The separate repository contains three workflows under `.github/workflows`.
 Fast tests and wheel-smoke tests run for pushes to `main` and for pull requests.
 The real unpaid local-effect test is a manual Docker workflow.
 
-The fast-test and wheel-smoke workflows passed on GitHub for commit `08a2589e15387a6385e57f4bfcef80f5e9dde73e` on 2026-07-27.
-The manual real Docker workflow has not run on a GitHub-hosted runner.
+The fast-test and wheel-smoke workflows passed on GitHub for commit `0cfa7497a942798aafeea6e5566bc886e966fde2` on 2026-07-27.
+The manual real Docker workflow also passed for that commit.
+It reported seven passes in 368.23 seconds from a non-editable wheel.
 
 The CI environment uses Python 3.12 and the locked uv environment.
 The real workflow does not enable candidate inference and does not require a model API key.
@@ -682,7 +683,6 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Remaining release validation
 
-- The real unpaid Docker workflow has not run from a non-editable wheel on a GitHub-hosted runner.
 - The complete model-backed workflow has not run from a non-editable wheel.
 - The final release candidate must be rebuilt and inspected after the current metadata changes.
 
@@ -719,9 +719,8 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 1. Push the current documentation and metadata changes to the separate repository.
 2. Confirm that the automatic fast and wheel-smoke workflows still pass.
-3. Run the manual unpaid Docker workflow from the non-editable wheel.
-4. Run one complete model-backed workflow from the non-editable wheel.
-5. Build and inspect the final release candidate.
+3. Run one complete model-backed workflow from the non-editable wheel.
+4. Build and inspect the final release candidate.
 
 ### Priority 2: Decide the end-to-end builder scope
 
