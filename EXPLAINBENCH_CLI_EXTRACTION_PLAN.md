@@ -365,7 +365,7 @@ A phase is complete only when all required checks and acceptance criteria pass.
 | 5 | Copy execution and tracer core | `complete` | Track, trace, inspect, tracer, and plugins import successfully. |
 | 6 | Configure one wheel | `complete` | The wheel contains every mapped package and required resource. |
 | 7 | Migrate and pass fast tests | `complete` | All fast tests pass in the new repository. |
-| 8 | Add clean-wheel tests | `complete` | Checker, resources, mocked lite and full evaluation, direct task selection, checkpoint behavior, model retries, and the first builder stage pass outside the repository. |
+| 8 | Add clean-wheel tests | `complete` | Checker, resources, evaluation, checkpoints, model retries, all ten mocked builder stages, and the first builder stage with real Git operations pass outside the repository. |
 | 9 | Run unpaid real validation | `complete` | Real scenarios `S01` through `S07` complete. |
 | 10 | Add paid-work persistence | `complete` | Raw prompts and responses are durable and resumable. |
 | 11 | Complete one real local-effect workflow | `complete` | A generated local-effect artifact was evaluated successfully. |
@@ -693,6 +693,8 @@ Each wheel test must:
 - [x] Confirm that all ten local stages list.
 - [x] Confirm that `identify-patched-functions` completes.
 - [x] Confirm that the first stage can resume without repeating work.
+- [x] Confirm that all ten stages complete and resume with deterministic external-command doubles.
+- [x] Confirm that the exported local-effect artifact passes the evaluator loader.
 
 ### Acceptance criteria
 
@@ -700,6 +702,7 @@ Each wheel test must:
 - [x] No test depends on the source checkout as its current directory.
 - [x] The current `ModuleNotFoundError: No module named 'dataset'` is fixed.
 - [x] The first builder stage works only with installed wheel content and declared external services.
+- [x] All ten builder stage wrappers exchange valid artifacts from the installed wheel.
 
 ## Phase 9: Run unpaid real validation
 
@@ -1316,6 +1319,26 @@ Keep real provider and Docker validation in separate opt-in workflows.
 Generate evaluation runtime inputs outside the source checkout.
 
 Next action: Add installed-wheel coverage for local-builder stages 2 through 10, then run the manual real Docker workflow.
+
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Added installed-wheel package-boundary coverage for all ten local-builder stages.
+The test runs the installed CLI code with deterministic doubles for Docker, model, and canonical child commands.
+It validates artifact exchange across every stage, complete resume without repeated commands, and typed loading of the exported local-effect artifact.
+Published the preceding evaluator coverage to the standalone repository.
+
+Checks: The focused installed-wheel builder suite reported 2 passed.
+The complete isolated-wheel suite reported 12 passed.
+GitHub fast tests and wheel-smoke tests passed for standalone commit `f12439755136`.
+
+Problems: The real unpaid Docker workflow and a complete model-backed workflow have not run from a non-editable wheel.
+
+Decisions: Keep deterministic external-command doubles in automatic wheel smoke tests.
+Use the opt-in real workflow to validate Docker and real scientific execution.
+
+Next action: Publish this builder coverage and run the manual real Docker workflow from the installed wheel.
 
 ## Progress log template
 

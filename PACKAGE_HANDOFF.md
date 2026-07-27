@@ -11,8 +11,8 @@ This document covers the package implementation only.
 It does not explain the research purpose of ExplainBench.
 
 The feature implementation for the agreed `0.1.0` scope is complete.
-Package readiness is confirmed for the checker, shared resources, mocked evaluation, evaluation checkpoints, and the first local-builder stage.
-Real model-backed evaluator validation and complete local-builder validation from a non-editable wheel remain in progress.
+Package readiness is confirmed for the checker, shared resources, mocked evaluation, evaluation checkpoints, and mocked execution of all ten local-builder stages.
+Real model-backed evaluator and local-builder validation from a non-editable wheel remain in progress.
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
 The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
 The package is not ready for a public release until the remaining non-editable-wheel validation passes.
@@ -39,10 +39,10 @@ These terms keep repository implementation status separate from release status.
 | Shared intent resources | Implemented and package-ready | The wheel contains both context files, both ground-truth files, and all 297 supported instance IDs. |
 | Effect artifact loading | Implemented and package-ready | Full and selected-task clean-wheel evaluation load staged local and end-to-end effect artifacts. |
 | Evaluation checkpoints | Implemented and package-ready | Clean-wheel tests cover compatible resume, malformed checkpoint rejection, semantic incompatibility rejection, retained failures, and successful retry. |
-| Local-effect question-builder CLI | Implemented and partly package-ready | The installed wheel lists all ten stages and completes and resumes the first canonical stage. |
-| Local-effect scientific stage wrappers | Implemented, with wheel validation incomplete | The wheel contains all canonical modules, but stages 2 through 10 have not run from a non-editable wheel. |
+| Local-effect question-builder CLI | Implemented and package-ready for mocked package-boundary validation | The installed wheel completes and resumes all ten stages with deterministic external-command doubles. |
+| Local-effect scientific stage wrappers | Implemented and package-ready for mocked package-boundary validation | All ten installed-wheel stage wrappers exchange and validate their expected artifacts. |
 | Local-effect real-data validation | Validated from an editable installation | Real scenarios `S01` through `S07` pass with Docker and inference disabled. |
-| Local-effect wheel execution | Partly package-ready | The first stage passes from a non-editable wheel, while the real unpaid workflow has not run from that wheel. |
+| Local-effect wheel execution | Partly package-ready | All stages pass with external-command doubles and the first stage passes with real Git operations, while the real unpaid workflow has not run from that wheel. |
 | Paid inference persistence | Implemented and validated in repository tests | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
 | Model-backed local-effect workflow | Validated from an editable installation | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
@@ -52,7 +52,7 @@ These terms keep repository implementation status separate from release status.
 The latest recorded complete local test result on 2026-07-27 was:
 
 ```text
-150 passed, 7 skipped
+151 passed, 7 skipped
 ```
 
 The seven skipped tests are the opt-in real local-effect tests.
@@ -670,8 +670,8 @@ Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
 The exact fast-CI command reported 139 passed and 7 skipped.
-The exact wheel-smoke command reported 11 passed.
-The complete local suite reported 150 passed and 7 skipped.
+The exact wheel-smoke command reported 12 passed.
+The complete local suite reported 151 passed and 7 skipped.
 The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with the package CLI.
 
 ## Known package gaps
@@ -682,7 +682,6 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Remaining release validation
 
-- Local-builder stages 2 through 10 have not run from a non-editable wheel.
 - The real unpaid Docker workflow has not run from a non-editable wheel on a GitHub-hosted runner.
 - The complete model-backed workflow has not run from a non-editable wheel.
 - The final release candidate must be rebuilt and inspected after the current metadata changes.
@@ -720,10 +719,9 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 1. Push the current documentation and metadata changes to the separate repository.
 2. Confirm that the automatic fast and wheel-smoke workflows still pass.
-3. Expand the isolated-wheel suite to cover local-builder stages 2 through 10.
-4. Run the manual unpaid Docker workflow from the non-editable wheel.
-5. Run one complete model-backed workflow from the non-editable wheel.
-6. Build and inspect the final release candidate.
+3. Run the manual unpaid Docker workflow from the non-editable wheel.
+4. Run one complete model-backed workflow from the non-editable wheel.
+5. Build and inspect the final release candidate.
 
 ### Priority 2: Decide the end-to-end builder scope
 
@@ -749,8 +747,8 @@ Current evidence does not yet satisfy the full list.
 - The opt-in real integration result is recorded.
 - Package installation, Docker, disk, network, credentials, runtime, and cleanup requirements are documented.
 
-The checker, shared resources, mocked evaluator package boundary, and first local-builder stage satisfy their installed-wheel criteria.
-Real model-backed evaluator validation and the complete local-builder workflow still require non-editable-wheel validation.
+The checker, shared resources, mocked evaluator package boundary, and mocked ten-stage local-builder package boundary satisfy their installed-wheel criteria.
+Real model-backed evaluator and local-builder workflows still require non-editable-wheel validation.
 These criteria do not replace the remaining public-release requirement for final GitHub-hosted validation.
 
 ## Verification commands

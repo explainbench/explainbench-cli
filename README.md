@@ -203,9 +203,9 @@ The approved package examples and runtime resources are present.
 All approved core modules have been copied.
 The one-wheel package mapping and resource declarations are complete.
 The final Phase 6 wheel passed archive and installed-package checks.
-The complete suite reports 150 passed and 7 documented opt-in skips.
+The complete suite reports 151 passed and 7 documented opt-in skips.
 The standalone tracer inspector and serializer suites also pass.
-Eleven clean-wheel tests cover the checker, resources, mocked lite and full evaluation, direct task selection, result writing, checkpoint handling, model retries, and the first local-builder stage with resume.
+Twelve clean-wheel tests cover the checker, resources, mocked lite and full evaluation, direct task selection, result writing, checkpoint handling, model retries, all ten local-builder stages with mocked external commands, and first-stage execution with real Git operations.
 The opt-in real Docker sequence reports seven passes for scenarios `S01` through `S07`.
 One complete model-backed local-effect workflow passed for `sympy__sympy-15349`.
 The generated artifact passed typed evaluator loading and one real `local.effect` evaluation.
