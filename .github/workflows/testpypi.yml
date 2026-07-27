@@ -2,6 +2,12 @@ name: Publish to TestPyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Upload artifacts before registry verification
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: read
@@ -79,6 +85,7 @@ jobs:
 
   publish:
     needs: build
+    if: inputs.publish
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
@@ -103,6 +110,11 @@ jobs:
     needs:
       - build
       - publish
+    if: >-
+      always() &&
+      needs.build.result == 'success' &&
+      (needs.publish.result == 'success' ||
+      needs.publish.result == 'skipped')
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -125,20 +137,12 @@ jobs:
         env:
           PACKAGE_VERSION: ${{ needs.build.outputs.version }}
         run: |
-          mkdir -p downloaded/wheel downloaded/sdist
           for attempt in $(seq 1 12); do
-            if python -m pip download \
-              --index-url https://test.pypi.org/simple/ \
-              --no-deps \
-              --only-binary=:all: \
-              --dest downloaded/wheel \
-              "explainbench-cli==${PACKAGE_VERSION}" \
-              && python -m pip download \
-              --index-url https://test.pypi.org/simple/ \
-              --no-deps \
-              --no-binary=:all: \
-              --dest downloaded/sdist \
-              "explainbench-cli==${PACKAGE_VERSION}"; then
+            if python .github/scripts/download-release-artifacts.py \
+              --index-url https://test.pypi.org \
+              --project explainbench-cli \
+              --version "${PACKAGE_VERSION}" \
+              --output downloaded; then
               exit 0
             fi
             sleep 10
