@@ -1220,7 +1220,7 @@ Problems: The license decision remains deferred.
 The workflows cannot run on GitHub until `explainbench-cli` becomes the root of its separate repository.
 The manual Docker workflow has not run on a GitHub-hosted runner.
 
-Decisions: Use `explainbench` as the distribution name and `0.1.0` as the first version.
+Decisions: Use `explain-bench` as the distribution name and `0.1.0` as the first version.
 Use `explainbench-team` and `imamnurby@gmail.com` as the package author.
 Use `https://explainbench.github.io` as the project homepage.
 Keep direct runtime dependencies exact for the current application-style release.
@@ -1247,7 +1247,7 @@ The complete suite therefore reports 143 passed and 7 skipped.
 The isolated wheel confirms that top-level `evaluation` is absent.
 It also confirms that candidate generation uses the current `explainbench.evaluation.Model` object.
 The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with the package CLI.
-The wheel contains 106 files and has SHA-256 `3fd6edbd3753171d4795c43e627f8c498c6ca3529d4987bdb66586daf07c3e6b`.
+The wheel contains 106 files and has SHA-256 `547f7dda80a0f65f21b367bf8b5218e4c66f838cb5f80603c67e0af9dc960487`.
 The wheel contains the expected `dataset`, `execution`, `explainbench`, `tracer`, and `tracer_plugin` packages.
 
 Problems: Code that imports the historical top-level `evaluation` package is no longer compatible.

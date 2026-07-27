@@ -5,19 +5,27 @@
 This document is the current information source for the ExplainBench Python package implementation.
 Use the source code and tests as the final authority when this document and the implementation differ.
 
-Status date: 2026-07-23.
+Status date: 2026-07-27.
 
 This document covers the package implementation only.
 It does not explain the research purpose of ExplainBench.
+
+The feature implementation for the agreed `0.1.0` scope is complete.
+Package readiness is confirmed for the checker, shared resources, mocked lite evaluation, and the first local-builder stage.
+Full evaluator and local-builder validation from a non-editable wheel remains in progress.
+The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
+The package is not ready for a public release until the project selects a license and records it in the repository and package metadata.
+The manual GitHub-hosted real Docker workflow must also validate the non-editable wheel.
 
 ## Status terms
 
 This document uses the following terms:
 
 - **Implemented** means that code exists and the fast automated tests cover it.
-- **Partly validated** means that code exists, but the intended Docker, model, or clean-install workflow has not completed.
 - **Package-ready** means that the feature works from an installed wheel outside the repository.
-- **Not implemented** means that the public workflow does not exist.
+- **Partly package-ready** means that some installed-wheel paths pass, but the complete feature has not run from a non-editable wheel.
+- **Release pending** means that the package implementation is complete, but a repository-level release requirement remains open.
+- **Out of initial scope** means that the feature is not part of the agreed `0.1.0` package implementation.
 
 These terms keep repository implementation status separate from release status.
 
@@ -26,20 +34,21 @@ These terms keep repository implementation status separate from release status.
 | Area | Status | Current evidence |
 |---|---|---|
 | Submission schema and checker | Implemented and package-ready | The checker works from the built wheel with its runtime dependencies available. |
-| Evaluation engine | Implemented | Fast tests cover lite, full, and selected-task evaluation with mocked inference. |
+| Evaluation engine | Implemented and partly package-ready | Mocked lite evaluation passes from a non-editable wheel, while full and selected-task wheel execution remain untested. |
 | Shared intent resources | Implemented and package-ready | The wheel contains both context files, both ground-truth files, and all 297 supported instance IDs. |
-| Effect artifact loading | Implemented | Fast tests cover local and end-to-end effect artifact loading and evaluation. |
+| Effect artifact loading | Implemented | Fast tests cover local and end-to-end effect artifact loading, but clean-wheel evaluation currently covers intent tasks only. |
 | Evaluation checkpoints | Implemented | Fast tests cover compatible resume and checkpoint validation. |
-| Local-effect question-builder CLI | Implemented in the repository | The CLI exposes all ten stages, complete runs, status, configuration, checkpoints, and publication. |
-| Local-effect scientific stage wrappers | Implemented in the repository | All ten wrappers call and validate their canonical commands. |
-| Local-effect real-data validation | Implemented and validated | Real scenarios `S01` through `S07` pass from the extracted package with Docker and inference disabled. |
-| Local-effect wheel execution | Package-ready for unpaid stages | The extracted wheel contains all canonical modules, and `S01` through `S07` pass from its installed CLI. |
-| Paid inference persistence | Implemented | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
-| Model-backed local-effect workflow | Implemented and validated | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
-| End-to-end effect question builder | Not implemented | End-to-end effect artifacts must be prepared outside the package. |
-| Package release verification | Partly validated | Clean-wheel, real Docker, paid candidate generation, and real evaluation checks pass, but release CI is incomplete. |
+| Local-effect question-builder CLI | Implemented and partly package-ready | The installed wheel lists all ten stages and completes and resumes the first canonical stage. |
+| Local-effect scientific stage wrappers | Implemented, with wheel validation incomplete | The wheel contains all canonical modules, but stages 2 through 10 have not run from a non-editable wheel. |
+| Local-effect real-data validation | Validated from an editable installation | Real scenarios `S01` through `S07` pass with Docker and inference disabled. |
+| Local-effect wheel execution | Partly package-ready | The first stage passes from a non-editable wheel, while the real unpaid workflow has not run from that wheel. |
+| Paid inference persistence | Implemented and validated in repository tests | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
+| Model-backed local-effect workflow | Validated from an editable installation | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
+| End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
+| Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
+| Public package release | Release pending | Fast and wheel-smoke workflows pass on GitHub, but license work and complete non-editable-wheel validation remain open. |
 
-The extracted test result on 2026-07-24 was:
+The latest recorded complete local test result on 2026-07-24 was:
 
 ```text
 143 passed, 7 skipped
@@ -78,7 +87,7 @@ The built wheel does not contain:
 - The repository examples.
 - The end-to-end question-builder implementation.
 
-The extracted package workspace at `explainbench-cli/` now includes the missing canonical modules.
+The standalone package repository includes the canonical modules that the original research-repository wheel omitted.
 
 ## Current architecture
 
@@ -544,7 +553,7 @@ This prevents an automatic second paid request when durability is uncertain.
 
 The scientific prompt template and Pydantic response parser are unchanged.
 
-### Wheel blocker
+### Resolved wheel packaging issue
 
 The original research-repository wheel includes the local builder wrappers but excludes their canonical modules.
 A run from that original wheel fails with:
@@ -553,19 +562,19 @@ A run from that original wheel fails with:
 ModuleNotFoundError: No module named 'dataset'
 ```
 
-This historical failure occurs because the runner invokes:
+This historical failure occurred because the runner invokes:
 
 ```text
 python -m dataset.extract_ground_truths.effect.trace_step1_generate_qualname_whitelist
 ```
 
 The selected extraction design keeps the current import names.
-It copies the required canonical modules under `src/core` in a new package-focused repository.
+It copies the required canonical modules under `src/core` in the package-focused repository.
 The wheel maps the children of `src/core` to their current top-level package names.
 This design avoids changes to the current scientific implementation during extraction.
 
-The extraction now contains `dataset`, `execution`, `tracer`, and `tracer_plugin`.
-The built extraction wheel installs these modules as their current top-level import names.
+The package now contains `dataset`, `execution`, `tracer`, and `tracer_plugin`.
+The built wheel installs these modules as their current top-level import names.
 Evaluation remains under the public `explainbench.evaluation` package.
 The historical top-level `evaluation` compatibility package was removed.
 The `core` repository container is not an installed import package.
@@ -575,7 +584,8 @@ The complete structure, migration tracker, and acceptance criteria are in [EXPLA
 
 ## End-to-end effect question builder
 
-The package does not implement:
+The end-to-end effect question builder was excluded from the agreed `0.1.0` scope.
+The package does not provide:
 
 ```bash
 explainbench question-builder end2end ...
@@ -628,17 +638,19 @@ Delete a workspace only after all builder processes stop and its resume and audi
 
 ## Release automation
 
-The extracted package contains three workflows under `.github/workflows`.
+The separate repository contains three workflows under `.github/workflows`.
 Fast tests and wheel-smoke tests run for pushes to `main` and for pull requests.
 The real unpaid local-effect test is a manual Docker workflow.
-These workflows become active when `explainbench-cli` becomes the root of its separate repository.
+
+The fast-test and wheel-smoke workflows passed on GitHub for commit `08a2589e15387a6385e57f4bfcef80f5e9dde73e` on 2026-07-27.
+The manual real Docker workflow has not run on a GitHub-hosted runner.
 
 The CI environment uses Python 3.12 and the locked uv environment.
 The real workflow does not enable candidate inference and does not require a model API key.
 
 ## Provisional release candidate
 
-The confirmed distribution name is `explainbench`.
+The confirmed distribution name is `explain-bench`.
 The confirmed first version is `0.1.0`.
 The package author is `explainbench-team`.
 The author email is `imamnurby@gmail.com`.
@@ -649,9 +661,9 @@ The current direct runtime dependencies use exact versions.
 The final unpinned direct dependency was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
 
-The provisional wheel is `dist/explainbench-0.1.0-py3-none-any.whl`.
+The provisional wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
 It contains 106 files.
-Its SHA-256 is `3fd6edbd3753171d4795c43e627f8c498c6ca3529d4987bdb66586daf07c3e6b`.
+Its SHA-256 is `547f7dda80a0f65f21b367bf8b5218e4c66f838cb5f80603c67e0af9dc960487`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
@@ -665,7 +677,15 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 ### Release blockers
 
 - The package license decision is deferred.
-- The new CI workflows have not run in the future separate repository.
+- The selected license is not recorded in a `LICENSE` file or in the package metadata.
+
+### Remaining release validation
+
+- Full and selected-task evaluation have not run from a non-editable wheel.
+- Local-builder stages 2 through 10 have not run from a non-editable wheel.
+- The real unpaid Docker workflow has not run from a non-editable wheel on a GitHub-hosted runner.
+- The complete model-backed workflow has not run from a non-editable wheel.
+- The final release candidate must be rebuilt and inspected after the license metadata is added.
 
 ### Validation gaps
 
@@ -675,15 +695,16 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Feature gaps
 
-- The end-to-end effect question builder is not implemented.
+- The end-to-end effect question builder is outside the agreed `0.1.0` scope.
 - The evaluator does not build missing effect artifacts automatically.
 - Docker and system dependency diagnostics are not implemented.
 - Automatic cleanup of large traces and Docker artifacts is not implemented.
 
 ### Distribution metadata gaps
 
-- The package metadata does not contain the usual release fields such as license, authors, and project URLs.
-- The repository examples are not present in the wheel.
+- The package metadata does not contain license information.
+- The author and project homepage metadata are present.
+- The repository examples are intentionally excluded from the wheel.
 - All dependencies are mandatory and exactly pinned.
 - Optional dependency groups for evaluation-only and builder workflows do not exist.
 
@@ -696,14 +717,17 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 
 ### Priority 1: Complete deferred license metadata
 
-1. Initialize the separate repository.
-2. Add the selected license and its package metadata.
+1. Select a license that is compatible with the copied core.
+2. Add the selected license file and package metadata.
 
-### Priority 2: Run release automation
+### Priority 2: Complete release automation
 
-1. Run fast and wheel-smoke workflows in the separate repository.
-2. Run the manual unpaid Docker workflow.
-3. Build and inspect the final release candidate.
+1. Push the current documentation and license changes to the separate repository.
+2. Confirm that the automatic fast and wheel-smoke workflows still pass.
+3. Expand the isolated-wheel suite to cover full evaluation, selected tasks, checkpoints, and all ten builder stages.
+4. Run the manual unpaid Docker workflow from the non-editable wheel.
+5. Run one complete model-backed workflow from the non-editable wheel.
+6. Build and inspect the final release candidate.
 
 ### Priority 3: Decide the end-to-end builder scope
 
@@ -713,7 +737,8 @@ Do not force both pipelines to use the same scientific stages.
 
 ## Package-ready acceptance criteria
 
-The package is ready for handoff as an installable implementation when all of these statements are true:
+Use the following criteria to mark the complete package as package-ready.
+Current evidence does not yet satisfy the full list.
 
 - A clean wheel contains every module and resource required by the selected workflow.
 - `explainbench --help` works outside the repository.
@@ -727,6 +752,10 @@ The package is ready for handoff as an installable implementation when all of th
 - The fast tests pass.
 - The opt-in real integration result is recorded.
 - Package installation, Docker, disk, network, credentials, runtime, and cleanup requirements are documented.
+
+The checker, shared resources, mocked lite evaluation, and first local-builder stage satisfy their installed-wheel criteria.
+The complete evaluator and local-builder workflows still require non-editable-wheel validation.
+These criteria do not replace the remaining public-release requirements for license metadata and final GitHub-hosted validation.
 
 ## Verification commands
 
@@ -758,7 +787,7 @@ uv build --wheel
 Inspect the wheel before a release:
 
 ```bash
-unzip -l dist/explainbench-*.whl
+unzip -l dist/explain_bench-*.whl
 ```
 
 Do not mark the local builder as package-ready until a builder stage works from that installed wheel outside the repository.

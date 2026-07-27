@@ -277,7 +277,7 @@ A regression test covers the package-shadowing case.
 
 Phase 12 confirmed these package metadata values:
 
-- Distribution name: `explainbench`.
+- Distribution name: `explain-bench`.
 - Version: `0.1.0`.
 - Author: `explainbench-team`.
 - Author email: `imamnurby@gmail.com`.
@@ -301,7 +301,7 @@ Verification:
 - The provisional wheel contains 106 files.
 - It contains all expected packages, resources, and entry points.
 - It contains no tests, examples, logs, results, caches, or build directories.
-- Its SHA-256 is `3fd6edbd3753171d4795c43e627f8c498c6ca3529d4987bdb66586daf07c3e6b`.
+- Its SHA-256 is `547f7dda80a0f65f21b367bf8b5218e4c66f838cb5f80603c67e0af9dc960487`.
 
 The license decision remains deferred until the separate repository is initialized.
 The new workflows have not run in that separate repository.
