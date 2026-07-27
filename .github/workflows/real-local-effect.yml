@@ -42,12 +42,34 @@ jobs:
       - name: Show Docker information
         run: docker info
 
+      - name: Prepare a run directory outside the repository
+        env:
+          EXPLAINBENCH_REAL_RUN_ROOT: >-
+            ${{ runner.temp }}/explainbench-real-wheel-run
+        run: |
+          mkdir -p \
+            "${EXPLAINBENCH_REAL_RUN_ROOT}/examples" \
+            "${EXPLAINBENCH_REAL_RUN_ROOT}/tests/real_local_effect"
+          cp \
+            examples/submission-full.json \
+            "${EXPLAINBENCH_REAL_RUN_ROOT}/examples/submission-full.json"
+          cp \
+            tests/real_local_effect/test_s01_s07_real_pipeline.py \
+            "${EXPLAINBENCH_REAL_RUN_ROOT}/tests/real_local_effect/"
+
       - name: Run real unpaid local-effect tests
         env:
           EXPLAINBENCH_REAL_EXECUTABLE: >-
             ${{ github.workspace }}/.real-wheel-venv/bin/explainbench
+          EXPLAINBENCH_REAL_RUN_ROOT: >-
+            ${{ runner.temp }}/explainbench-real-wheel-run
           PYTHONNOUSERSITE: "1"
-        run: >-
-          env -u PYTHONPATH
-          .real-wheel-venv/bin/python -P -m pytest
-          tests/real_local_effect -ra
+        run: |
+          cd "${EXPLAINBENCH_REAL_RUN_ROOT}"
+          env -u PYTHONPATH \
+            "${{ github.workspace }}/.real-wheel-venv/bin/python" \
+            -P -m pytest \
+            -p no:tracer_plugin \
+            -o "markers=real_local_effect: real SWE-bench execution tests" \
+            tests/real_local_effect \
+            -ra

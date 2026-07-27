@@ -365,11 +365,11 @@ A phase is complete only when all required checks and acceptance criteria pass.
 | 5 | Copy execution and tracer core | `complete` | Track, trace, inspect, tracer, and plugins import successfully. |
 | 6 | Configure one wheel | `complete` | The wheel contains every mapped package and required resource. |
 | 7 | Migrate and pass fast tests | `complete` | All fast tests pass in the new repository. |
-| 8 | Add clean-wheel tests | `complete` | Checker, resources, evaluation, checkpoints, model retries, all ten mocked builder stages, and the first builder stage with real Git operations pass outside the repository. |
+| 8 | Add clean-wheel tests | `complete` | Checker, resources, evaluation, checkpoints, model retries, all ten mocked builder stages, canonical module resolution, paid-response interruption recovery, and the first builder stage with real Git operations pass outside the repository. |
 | 9 | Run unpaid real validation | `complete` | Real scenarios `S01` through `S07` complete. |
 | 10 | Add paid-work persistence | `complete` | Raw prompts and responses are durable and resumable. |
 | 11 | Complete one real local-effect workflow | `complete` | A generated local-effect artifact was evaluated successfully. |
-| 12 | Prepare release and handoff | `in_progress` | License metadata is complete, and required non-editable-wheel validation remains open. |
+| 12 | Prepare release and handoff | `complete` | License metadata and required non-editable-wheel validation are complete. |
 
 ## Phase 0: Confirm extraction decisions
 
@@ -1391,6 +1391,31 @@ Decisions: Treat model accuracy separately from package integration success.
 Keep the paid validation evidence private and ignored by Git.
 
 Next action: Review the release evidence, create the `0.1.0` tag, and publish the confirmed wheel to PyPI.
+
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Strengthened the isolated-wheel all-stage builder validation.
+Every canonical child module now resolves from `site-packages` before deterministic command substitution begins.
+Added a two-process test that stops immediately after an atomic paid-response write and reuses the verified response after restart.
+Changed the manual real Docker workflow to copy its tests and submission into a temporary directory outside the repository.
+The workflow runs pytest and the installed wheel executable from that external directory with `PYTHONPATH` removed.
+
+Checks: The focused installed-wheel builder suite reported 3 passed.
+The complete isolated-wheel suite reported 13 passed.
+The complete local suite reported 152 passed and 7 skipped.
+The workflow YAML parsed successfully.
+An external-directory collection rehearsal found all seven real scenarios without warnings.
+The complete external-directory Docker run reported 7 passed in 389.85 seconds.
+
+Problems: No item 3 or item 4 validation gap remains.
+
+Decisions: Keep deterministic child-command substitutes for automatic stage-boundary validation.
+Use explicit module-origin checks to verify that substitution cannot hide a missing wheel module.
+Copy only the real test and its submission input into the external workflow directory.
+
+Next action: Complete the remaining distribution checks before the public registry release.
 
 ## Progress log template
 

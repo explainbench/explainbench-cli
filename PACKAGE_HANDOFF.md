@@ -41,10 +41,10 @@ These terms keep repository implementation status separate from release status.
 | Effect artifact loading | Implemented and package-ready | Full and selected-task clean-wheel evaluation load staged local and end-to-end effect artifacts. |
 | Evaluation checkpoints | Implemented and package-ready | Clean-wheel tests cover compatible resume, malformed checkpoint rejection, semantic incompatibility rejection, retained failures, and successful retry. |
 | Local-effect question-builder CLI | Implemented and package-ready for mocked package-boundary validation | The installed wheel completes and resumes all ten stages with deterministic external-command doubles. |
-| Local-effect scientific stage wrappers | Implemented and package-ready for mocked package-boundary validation | All ten installed-wheel stage wrappers exchange and validate their expected artifacts. |
-| Local-effect real-data validation | Package-ready for unpaid Docker validation | Real scenarios `S01` through `S07` pass from a non-editable wheel on a GitHub-hosted runner. |
+| Local-effect scientific stage wrappers | Implemented and package-ready for mocked package-boundary validation | All ten installed-wheel stage wrappers exchange and validate their expected artifacts, and every canonical child module resolves from `site-packages`. |
+| Local-effect real-data validation | Package-ready for unpaid Docker validation | Real scenarios `S01` through `S07` pass from a non-editable wheel on a GitHub-hosted runner, and the workflow now runs from a temporary directory outside the repository. |
 | Local-effect wheel execution | Package-ready | The unpaid real workflow passes from the wheel, and the complete model-backed builder finishes and resumes all ten stages. |
-| Paid inference persistence | Implemented and validated in repository tests | Tests confirm atomic prompt and response storage, checksums, source links, interruption recovery, and no repeated compatible request. |
+| Paid inference persistence | Implemented and validated in repository and clean-wheel tests | Tests confirm atomic prompt and response storage, checksums, source links, process-interruption recovery, and no repeated compatible request. |
 | Model-backed local-effect workflow | Package-ready | The installed wheel generated, loaded, and evaluated an artifact for `sympy__sympy-15349`, then reused all ten stages without a second candidate request. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
@@ -53,7 +53,7 @@ These terms keep repository implementation status separate from release status.
 The latest recorded complete local test result on 2026-07-27 was:
 
 ```text
-151 passed, 7 skipped
+152 passed, 7 skipped
 ```
 
 The seven skipped tests are the opt-in real local-effect tests.
@@ -644,10 +644,14 @@ Delete a workspace only after all builder processes stop and its resume and audi
 The separate repository contains three workflows under `.github/workflows`.
 Fast tests and wheel-smoke tests run for pushes to `main` and for pull requests.
 The real unpaid local-effect test is a manual Docker workflow.
+The manual workflow copies the real tests and submission into a temporary directory outside the repository before it starts pytest.
+The installed wheel executable also uses that temporary directory as its working directory.
 
 The fast-test and wheel-smoke workflows passed on GitHub for commit `0cfa7497a942798aafeea6e5566bc886e966fde2` on 2026-07-27.
 The manual real Docker workflow also passed for that commit.
 It reported seven passes in 368.23 seconds from a non-editable wheel.
+The revised external-directory workflow was also reproduced locally from a fresh non-editable wheel on 2026-07-27.
+It reported seven passes in 389.85 seconds while pytest, its copied inputs, the builder workspace, and the installed CLI all ran outside the repository.
 
 The CI environment uses Python 3.12 and the locked uv environment.
 The real workflow does not enable candidate inference and does not require a model API key.
@@ -672,8 +676,8 @@ Its SHA-256 is `7e5430fa5d208358d0c47367b2fa1552848cc7d95649578e52ee56ab609af842
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
 The exact fast-CI command reported 139 passed and 7 skipped.
-The exact wheel-smoke command reported 12 passed.
-The complete local suite reported 151 passed and 7 skipped.
+The exact wheel-smoke command reported 13 passed.
+The complete local suite reported 152 passed and 7 skipped.
 The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with the package CLI.
 
 ## Known package gaps

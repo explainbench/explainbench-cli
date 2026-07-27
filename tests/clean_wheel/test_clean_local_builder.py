@@ -19,6 +19,7 @@ diff --git a/module.py b/module.py
 +    return 2
 """
 MOCKED_PIPELINE = """\
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -62,6 +63,28 @@ def write_harness_output(arguments, context, payload, *, inspection=False):
 
 
 calls = []
+
+canonical_modules = (
+    runners.IDENTIFY_PATCHED_FUNCTIONS_MODULE,
+    runners.TRACK_TEST_CALLS_MODULE,
+    runners.SELECT_TRACE_FUNCTIONS_MODULE,
+    runners.TRACE_PROGRAM_STATE_MODULE,
+    runners.BUILD_STEP1_MODULE,
+    runners.BUILD_STEP2_MODULE,
+    runners.BUILD_STEP3_MODULE,
+    runners.BUILD_STEP3_MODULE,
+    runners.BUILD_STEP4_MODULE,
+    runners.BUILD_STEP5_MODULE,
+)
+assert len(canonical_modules) == len(LOCAL_STAGE_REGISTRY.names)
+for module in canonical_modules:
+    specification = importlib.util.find_spec(module)
+    assert specification is not None, module
+    assert specification.origin is not None, module
+    assert "site-packages" in Path(specification.origin).resolve().parts, (
+        module,
+        specification.origin,
+    )
 
 
 def fake_command(module, raw_arguments, context, **kwargs):
@@ -534,3 +557,81 @@ def test_clean_mocked_local_builder_pipeline(clean_wheel: CleanWheel):
 
     _assert_success(result, "mocked installed-wheel builder pipeline")
     assert result.stdout.rstrip().endswith("clean mocked pipeline passed")
+
+
+def test_clean_paid_response_survives_process_interruption(
+    clean_wheel: CleanWheel,
+):
+    root = clean_wheel.run_directory / "paid-response-interruption"
+    interrupted_audit = root / "interrupted-audit"
+    resumed_audit = root / "resumed-audit"
+    root.mkdir()
+
+    interrupted = clean_wheel.run_python(
+        """\
+import os
+import sys
+
+from dataset.extract_ground_truths.effect.paid_inference import (
+    PaidInferenceJournal,
+)
+
+journal = PaidInferenceJournal(
+    sys.argv[1],
+    prompt="clean wheel interruption prompt",
+    model_id="clean-wheel-fake",
+    reasoning_effort="medium",
+    response_schema=(
+        "dataset.extract_ground_truths.effect."
+        "infer_expression.ExpressionList"
+    ),
+)
+journal.record_response('{"expressions":[{"expr":"value"}]}')
+os._exit(75)
+""",
+        str(interrupted_audit),
+    )
+    assert interrupted.returncode == 75
+
+    resumed = clean_wheel.run_python(
+        """\
+import json
+import sys
+from pathlib import Path
+
+from dataset.extract_ground_truths.effect.infer_expression import (
+    ExpressionList,
+)
+from dataset.extract_ground_truths.effect.paid_inference import (
+    PaidInferenceJournal,
+)
+
+journal = PaidInferenceJournal(
+    sys.argv[1],
+    prompt="clean wheel interruption prompt",
+    model_id="clean-wheel-fake",
+    reasoning_effort="medium",
+    response_schema=(
+        "dataset.extract_ground_truths.effect."
+        "infer_expression.ExpressionList"
+    ),
+    resume_directories=(Path(sys.argv[2]),),
+)
+prediction = journal.reuse_response(ExpressionList)
+assert prediction is not None
+assert [item.expr for item in prediction.expressions] == ["value"]
+manifest = json.loads(journal.manifest_path.read_text(encoding="utf-8"))
+assert len(manifest["responses"]) == 1
+assert manifest["responses"][0]["reused_from"]["path"] == (
+    "responses/response-0001.txt"
+)
+assert manifest["selected_response"]["path"] == (
+    "responses/response-0001.txt"
+)
+print("clean interrupted paid response reused")
+""",
+        str(resumed_audit),
+        str(interrupted_audit),
+    )
+    _assert_success(resumed, "interrupted paid-response recovery")
+    assert resumed.stdout.strip() == "clean interrupted paid response reused"
