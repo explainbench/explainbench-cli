@@ -279,6 +279,7 @@ explainbench-cli/
 ├── MANIFEST.in
 ├── PACKAGE_HANDOFF.md
 ├── README.md
+├── THIRD_PARTY_NOTICES.md
 ├── pyproject.toml
 └── uv.lock
 ```
@@ -368,7 +369,7 @@ A phase is complete only when all required checks and acceptance criteria pass.
 | 9 | Run unpaid real validation | `complete` | Real scenarios `S01` through `S07` complete. |
 | 10 | Add paid-work persistence | `complete` | Raw prompts and responses are durable and resumable. |
 | 11 | Complete one real local-effect workflow | `complete` | A generated local-effect artifact was evaluated successfully. |
-| 12 | Prepare release and handoff | `in_progress` | Technical release checks pass, and owner metadata remains open. |
+| 12 | Prepare release and handoff | `in_progress` | License metadata is complete, and required non-editable-wheel validation remains open. |
 
 ## Phase 0: Confirm extraction decisions
 
@@ -776,7 +777,7 @@ Status: `in_progress`.
 
 - [x] Add package description.
 - [x] Add README metadata.
-- [ ] Add license metadata.
+- [x] Add license metadata.
 - [x] Add authors.
 - [x] Add project URLs.
 - [x] Review the distribution name.
@@ -802,7 +803,7 @@ Status: `in_progress`.
 - [x] A colleague can install and test the package from the documentation.
 - [ ] The release candidate passes all required CI checks.
 - [x] The wheel contains only intended files.
-- [ ] The package has a clear license and owner.
+- [x] The package has a clear license and owner.
 - [x] The copied core has one documented source of truth.
 
 ## Migration manifest
@@ -867,7 +868,7 @@ Status: `in_progress`.
 | A repository-relative path remains | A command works only from a checkout. | Run every clean-wheel test outside the source directory. | Open |
 | The `core` directory becomes an import namespace | Existing imports break. | Do not add `src/core/__init__.py`; use explicit package mappings. | Closed |
 | Tracer plugin registration changes | Docker test execution can change. | Preserve and test the pytest entry point. | Closed |
-| Licenses are incompatible or incomplete | Distribution cannot be released safely. | Resolve licensing before copying core into a release branch. | Open |
+| Licenses are incompatible or incomplete | Distribution cannot be released safely. | Use MIT for ExplainBench and preserve the SWE-bench MIT attribution. | Closed |
 | Historical data enters the wheel | The wheel becomes large and submission-specific. | Use explicit package and resource manifests. | Closed |
 | Test assertions are weakened during relocation | Behavior changes can be hidden. | Permit path-only test changes and review all assertion changes. | Open |
 | Paid inference runs before durability exists | Model work can be lost or repeated. | Complete Phase 10 before Phase 11. | Closed |
@@ -891,6 +892,7 @@ Status: `in_progress`.
 | D013 | Defer the package license decision until Git repository initialization. | Agreed | 2026-07-23 |
 | D014 | Let the research repository consume released package versions after extraction. | Agreed | 2026-07-23 |
 | D015 | Remove the compatibility-only top-level `evaluation` package and use `explainbench.evaluation` directly. | Agreed | 2026-07-24 |
+| D016 | License ExplainBench under MIT and preserve the complete SWE-bench copyright and MIT license notice. | Agreed | 2026-07-27 |
 
 ## Progress log
 
@@ -1261,6 +1263,30 @@ Do not change evaluator, question-builder, execution, or tracer behavior.
 
 Next action: Add the deferred license and run CI from the separate repository.
 
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Licensed ExplainBench under the MIT License.
+Added `LICENSE` with the ExplainBench Team copyright.
+Added `THIRD_PARTY_NOTICES.md` with the complete SWE-bench copyright and MIT license notice.
+Added the MIT SPDX expression and both license files to the package metadata.
+Added an isolated-wheel assertion for the license expression and both packaged notices.
+
+Checks: The complete non-wheel suite reported 139 passed and 7 skipped.
+The isolated wheel suite reported 4 passed.
+The wheel metadata reports `License-Expression: MIT`.
+The wheel contains 108 files and has SHA-256 `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8`.
+Both license files are present under `explain_bench-0.1.0.dist-info/licenses/`.
+
+Problems: Complete evaluator and local-builder validation from a non-editable wheel remains open.
+
+Decisions: Use the MIT License for ExplainBench.
+Identify the ExplainBench Team as the project copyright holder.
+Preserve the complete SWE-bench author copyright and MIT terms in a separate third-party notice.
+
+Next action: Complete the remaining non-editable-wheel validation and run the manual Docker workflow in the separate repository.
+
 ## Progress log template
 
 Add one entry after each work session:
@@ -1303,4 +1329,4 @@ Phase 11 is complete.
 
 Phase 12 is in progress.
 
-Add the deferred license and run CI from the separate repository.
+Complete the required non-editable-wheel validation and run the manual Docker workflow in the separate repository.

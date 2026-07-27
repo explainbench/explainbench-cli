@@ -32,3 +32,25 @@ def test_clean_checker(clean_wheel: CleanWheel):
     assert location_result.returncode == 0, location_result.stderr
     assert "site-packages" in location_result.stdout
     assert str(clean_wheel.source_root) not in location_result.stdout
+
+    metadata_result = clean_wheel.run_python(
+        """
+from importlib.metadata import distribution, metadata
+
+package_metadata = metadata("explain-bench")
+assert package_metadata["License-Expression"] == "MIT"
+
+files = {
+    str(path)
+    for path in (distribution("explain-bench").files or ())
+}
+assert any(path.endswith(".dist-info/licenses/LICENSE") for path in files)
+assert any(
+    path.endswith(".dist-info/licenses/THIRD_PARTY_NOTICES.md")
+    for path in files
+)
+print("license metadata passed")
+"""
+    )
+    assert metadata_result.returncode == 0, metadata_result.stderr
+    assert metadata_result.stdout.strip() == "license metadata passed"

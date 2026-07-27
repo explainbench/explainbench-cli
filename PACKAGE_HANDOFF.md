@@ -14,7 +14,8 @@ The feature implementation for the agreed `0.1.0` scope is complete.
 Package readiness is confirmed for the checker, shared resources, mocked lite evaluation, and the first local-builder stage.
 Full evaluator and local-builder validation from a non-editable wheel remains in progress.
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
-The package is not ready for a public release until the project selects a license and records it in the repository and package metadata.
+The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
+The package is not ready for a public release until the remaining non-editable-wheel validation passes.
 The manual GitHub-hosted real Docker workflow must also validate the non-editable wheel.
 
 ## Status terms
@@ -46,7 +47,7 @@ These terms keep repository implementation status separate from release status.
 | Model-backed local-effect workflow | Validated from an editable installation | One complete real workflow generated, loaded, and evaluated an artifact for `sympy__sympy-15349`. |
 | End-to-end effect question builder | Out of initial scope | The evaluator accepts staged end-to-end effect artifacts, but another process must prepare them. |
 | Package feature scope | Complete for the agreed `0.1.0` scope | Fast tests, real Docker preparation, paid candidate generation, artifact publication, evaluation, and resume checks pass. |
-| Public package release | Release pending | Fast and wheel-smoke workflows pass on GitHub, but license work and complete non-editable-wheel validation remain open. |
+| Public package release | Release pending | Fast and wheel-smoke workflows pass on GitHub, but complete non-editable-wheel validation remains open. |
 
 The latest recorded complete local test result on 2026-07-24 was:
 
@@ -662,8 +663,8 @@ The final unpinned direct dependency was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
 
 The provisional wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
-It contains 106 files.
-Its SHA-256 is `547f7dda80a0f65f21b367bf8b5218e4c66f838cb5f80603c67e0af9dc960487`.
+It contains 108 files.
+Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
@@ -676,8 +677,7 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Release blockers
 
-- The package license decision is deferred.
-- The selected license is not recorded in a `LICENSE` file or in the package metadata.
+- No known license or ownership blocker remains.
 
 ### Remaining release validation
 
@@ -685,7 +685,7 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 - Local-builder stages 2 through 10 have not run from a non-editable wheel.
 - The real unpaid Docker workflow has not run from a non-editable wheel on a GitHub-hosted runner.
 - The complete model-backed workflow has not run from a non-editable wheel.
-- The final release candidate must be rebuilt and inspected after the license metadata is added.
+- The final release candidate must be rebuilt and inspected after the current metadata changes.
 
 ### Validation gaps
 
@@ -702,7 +702,8 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 
 ### Distribution metadata gaps
 
-- The package metadata does not contain license information.
+- The package metadata contains the MIT SPDX license expression.
+- The wheel includes the project license and the SWE-bench third-party notice.
 - The author and project homepage metadata are present.
 - The repository examples are intentionally excluded from the wheel.
 - All dependencies are mandatory and exactly pinned.
@@ -715,21 +716,16 @@ They should be complete before a public package release.
 
 The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTION_PLAN.md](EXPLAINBENCH_CLI_EXTRACTION_PLAN.md).
 
-### Priority 1: Complete deferred license metadata
+### Priority 1: Complete release automation
 
-1. Select a license that is compatible with the copied core.
-2. Add the selected license file and package metadata.
-
-### Priority 2: Complete release automation
-
-1. Push the current documentation and license changes to the separate repository.
+1. Push the current documentation and metadata changes to the separate repository.
 2. Confirm that the automatic fast and wheel-smoke workflows still pass.
 3. Expand the isolated-wheel suite to cover full evaluation, selected tasks, checkpoints, and all ten builder stages.
 4. Run the manual unpaid Docker workflow from the non-editable wheel.
 5. Run one complete model-backed workflow from the non-editable wheel.
 6. Build and inspect the final release candidate.
 
-### Priority 3: Decide the end-to-end builder scope
+### Priority 2: Decide the end-to-end builder scope
 
 Implement the end-to-end builder only after the local builder is package-ready.
 Reuse the common orchestration components when they match the end-to-end pipeline.
@@ -755,7 +751,7 @@ Current evidence does not yet satisfy the full list.
 
 The checker, shared resources, mocked lite evaluation, and first local-builder stage satisfy their installed-wheel criteria.
 The complete evaluator and local-builder workflows still require non-editable-wheel validation.
-These criteria do not replace the remaining public-release requirements for license metadata and final GitHub-hosted validation.
+These criteria do not replace the remaining public-release requirement for final GitHub-hosted validation.
 
 ## Verification commands
 

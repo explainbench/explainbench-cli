@@ -282,6 +282,8 @@ Phase 12 confirmed these package metadata values:
 - Author: `explainbench-team`.
 - Author email: `imamnurby@gmail.com`.
 - Homepage: `https://explainbench.github.io`.
+- License: MIT.
+- Third-party attribution: the complete SWE-bench copyright and MIT license notice.
 
 The remaining direct dependency without an exact version was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
@@ -298,13 +300,14 @@ Verification:
 - The exact wheel-smoke command reported 4 passed.
 - The complete local suite reported 143 passed and 7 skipped.
 - The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds.
-- The provisional wheel contains 106 files.
+- The provisional wheel contains 108 files.
 - It contains all expected packages, resources, and entry points.
 - It contains no tests, examples, logs, results, caches, or build directories.
-- Its SHA-256 is `547f7dda80a0f65f21b367bf8b5218e4c66f838cb5f80603c67e0af9dc960487`.
+- Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8`.
 
-The license decision remains deferred until the separate repository is initialized.
-The new workflows have not run in that separate repository.
+The separate repository exists.
+The fast-test and wheel-smoke workflows pass in that repository.
+The manual real Docker workflow has not run there.
 
 The real-test fixture prefers the `explainbench` executable beside the Python interpreter that runs pytest.
 This prevents an outer development environment from silently selecting another repository's installation.
@@ -324,5 +327,7 @@ When a copied core file changes:
 
 ## License
 
-The package license decision is deferred until the separate Git repository is initialized.
-Licensing must be complete before public distribution.
+ExplainBench uses the MIT License.
+The project license identifies the ExplainBench Team as the copyright holder.
+`THIRD_PARTY_NOTICES.md` preserves the complete SWE-bench copyright and MIT license notice.
+Both files are included in the built wheel through the package metadata.

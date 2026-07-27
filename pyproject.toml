@@ -4,6 +4,11 @@ version = "0.1.0"
 description = "Validate and evaluate code-change explanations and build local-effect question artifacts"
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
+license-files = [
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+]
 authors = [
     { name = "explainbench-team", email = "imamnurby@gmail.com" },
 ]

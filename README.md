@@ -224,4 +224,9 @@ See [PACKAGE_HANDOFF.md](PACKAGE_HANDOFF.md) for current implementation and vali
 ## Development state
 
 The package extraction and local validation are complete.
-Do not publish a public package release until the license decision is complete and the release candidate passes the required CI workflows in this repository.
+Do not publish a public package release until the release candidate passes the required CI workflows in this repository.
+
+## License
+
+ExplainBench is available under the [MIT License](LICENSE).
+The distribution preserves the SWE-bench copyright and MIT license notice in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
