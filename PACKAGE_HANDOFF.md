@@ -12,7 +12,7 @@ It does not explain the research purpose of ExplainBench.
 
 The feature implementation for the agreed `0.1.0` scope is complete.
 Package readiness is confirmed for the checker, shared resources, evaluation, evaluation checkpoints, and all ten local-builder stages.
-The real unpaid Docker and model-backed workflows pass from a non-editable wheel.
+The real unpaid Docker workflow and a fresh ten-stage model-backed workflow pass from a non-editable wheel.
 The separate repository exists at `https://github.com/explainbench/explainbench-cli`.
 The project uses the MIT License and preserves the SWE-bench copyright and MIT license notice.
 The package satisfies the agreed `0.1.0` release-validation requirements.
@@ -525,13 +525,17 @@ The current default test run still skips all seven real-data tests because they 
 The fixed test instance is `sympy__sympy-15349`.
 The default real-test workspace is `.explainbench/real-tests/sympy-15349`.
 
-The Phase 11 complete builder run enabled model inference for this instance.
+The final fresh acceptance run enabled model inference for this instance.
+It started from a new workspace with no older stage result or checkpoint.
 It requested 10 changed candidates and 10 unchanged candidates from `gpt-5.2-2025-12-11` with medium reasoning effort.
-All ten builder stages completed.
+All ten builder stages reported `completed=1`, `reused=0`, and `failed=0`.
 The published files loaded as one typed `LocalEffectContext` and one typed `AnswerGroundTruth`.
 One `local.effect` evaluation completed with `gpt-5-mini-2025-08-07`.
-The evaluation processed one task instance with no failure and produced a score of 1.
+The evaluation processed one task instance with no failure and produced a score of `0.0`.
+This score is an answer-quality result and not an integration failure.
 The repeated complete builder command reused all ten stages and made no second candidate request.
+The candidate audit still contained exactly one attempt and one paid response after resume.
+The ignored evidence is stored under `.explainbench/release-validation/fresh-wheel-model-2026-07-27`.
 
 Canonical child commands use Python safe-path mode.
 This prevents a package in the caller's current directory from shadowing the installed canonical package.
@@ -652,6 +656,8 @@ The manual real Docker workflow also passed for that commit.
 It reported seven passes in 368.23 seconds from a non-editable wheel.
 The revised external-directory workflow was also reproduced locally from a fresh non-editable wheel on 2026-07-27.
 It reported seven passes in 389.85 seconds while pytest, its copied inputs, the builder workspace, and the installed CLI all ran outside the repository.
+The revised workflow then passed on GitHub for standalone commit `f7311881bc45b5b367b4dc59a139b4a00f05e243`.
+GitHub run `30239971913` reported seven passes in 380.13 seconds with its pytest root under the runner temporary directory.
 
 The CI environment uses Python 3.12 and the locked uv environment.
 The real workflow does not enable candidate inference and does not require a model API key.
@@ -679,6 +685,7 @@ The exact fast-CI command reported 139 passed and 7 skipped.
 The exact wheel-smoke command reported 13 passed.
 The complete local suite reported 152 passed and 7 skipped.
 The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with the package CLI.
+The fresh model-backed acceptance used a separately built wheel with SHA-256 `47ed7d31d315e06af498001bca05262e5d67cea91b6cbf38cfe94d4435f95c04`.
 
 ## Known package gaps
 

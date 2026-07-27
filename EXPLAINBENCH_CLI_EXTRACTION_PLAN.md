@@ -1417,6 +1417,38 @@ Copy only the real test and its submission input into the external workflow dire
 
 Next action: Complete the remaining distribution checks before the public registry release.
 
+Date: 2026-07-27.
+
+Phase: 12.
+
+Completed: Published the revised external-directory Docker workflow to the standalone repository.
+Dispatched the manual workflow for standalone commit `f7311881bc45b5b367b4dc59a139b4a00f05e243`.
+Built and installed a fresh non-editable wheel for the final model-backed acceptance.
+Started the complete builder from a new workspace with no older stage checkpoints.
+Ran candidate generation, candidate execution and validation, answer-choice construction, artifact publication, typed artifact loading, and one real `local.effect` evaluation.
+Repeated the exact builder command with `--resume`.
+Copied the private workspace, dereferenced artifacts, and evaluation result into the ignored `.explainbench/release-validation/fresh-wheel-model-2026-07-27` directory.
+
+Checks: GitHub run `30239971913` reported 7 passed in 380.13 seconds.
+Its pytest root was `/home/runner/work/_temp/explainbench-real-wheel-run`.
+The fresh acceptance wheel SHA-256 was `47ed7d31d315e06af498001bca05262e5d67cea91b6cbf38cfe94d4435f95c04`.
+The `dataset`, `execution`, `explainbench`, and `tracer` packages loaded from the clean environment's `site-packages`.
+Every builder stage reported `completed=1`, `reused=0`, and `failed=0` on the first run.
+The candidate audit contained one 15,105-byte prompt, one selected raw response, and matching checksums.
+The exported files loaded as `LocalEffectContext` and `AnswerGroundTruth`.
+The evaluation processed one instance with no failure and removed its checkpoint.
+The evaluation score was `0.0`, which is an answer-quality result and not an integration failure.
+The sandboxed resume reported `reused=1` for all ten stages.
+The candidate stage still contained one attempt and one paid response after resume.
+
+Problems: No section 4 or section 5 acceptance problem remains.
+
+Decisions: Require the final paid release acceptance to start from a new workspace.
+Keep the paid evidence private and ignored by Git.
+Treat answer quality separately from package integration success.
+
+Next action: Complete the distribution checks before the public registry release.
+
 ## Progress log template
 
 Add one entry after each work session:

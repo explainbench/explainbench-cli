@@ -208,12 +208,13 @@ The complete suite reports 152 passed and 7 documented opt-in skips.
 The standalone tracer inspector and serializer suites also pass.
 Thirteen clean-wheel tests cover the checker, resources, mocked lite and full evaluation, direct task selection, result writing, checkpoint handling, model retries, all ten local-builder stages with mocked external commands, first-stage execution with real Git operations, canonical module resolution from `site-packages`, and paid-response recovery after a process interruption.
 The opt-in real Docker sequence reports seven passes for scenarios `S01` through `S07`.
-The same seven scenarios passed on a GitHub-hosted runner from a non-editable wheel.
+The same seven scenarios passed on a GitHub-hosted runner from a non-editable wheel while pytest and the installed CLI ran outside the repository.
 The manual workflow copies its tests and submission into a temporary directory and runs pytest and the installed CLI from outside the repository.
-One complete model-backed local-effect workflow passed from a non-editable wheel for `sympy__sympy-15349`.
+One fresh complete model-backed local-effect workflow passed from a non-editable wheel for `sympy__sympy-15349`.
+All ten stages completed without an older workspace or reused checkpoint.
 The generated artifact passed typed evaluator loading and one real `local.effect` evaluation.
 The repeated builder command reused all ten stages.
-The sequence confirms artifact checksums and checkpoint reuse without a model API call.
+The sequence confirms artifact checksums and full resume without a second candidate-model request.
 Candidate inference now stores the complete prompt and each raw response before parsing.
 Checksummed attempt records support audit and reuse after interruption.
 
