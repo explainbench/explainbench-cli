@@ -1352,6 +1352,7 @@ Checks: GitHub fast tests and wheel-smoke tests passed for standalone commit `0c
 The GitHub-hosted real workflow reported 7 passed in 368.23 seconds from the isolated wheel.
 The local wheel contains 108 files, the expected packages and resources, MIT metadata, license notices, console entry point, and pytest entry point.
 The installed final artifact reports version `0.1.0` and shows all public command groups.
+The post-validation release-candidate wheel has SHA-256 `b70b6d1d2166d6de4d0a23fbf485e3139a9003cbb6604ac33d520e3736501210`.
 
 Problems: A complete model-backed workflow has not run from a non-editable wheel.
 The paid command requires explicit approval to send submission-derived prompt data to OpenAI.
@@ -1359,7 +1360,7 @@ The paid command requires explicit approval to send submission-derived prompt da
 Decisions: Make the GitHub-hosted real workflow install the wheel directly.
 Keep paid model validation outside GitHub Actions.
 
-Next action: Obtain explicit approval for the model data transfer, run the complete model-backed workflow, and finalize the wheel checksum.
+Next action: Obtain explicit approval for the model data transfer and run the complete model-backed workflow.
 
 ## Progress log template
 
@@ -1404,4 +1405,4 @@ Phase 11 is complete.
 Phase 12 is in progress.
 
 Obtain explicit approval for the model data transfer.
-Then run the complete model-backed workflow from the installed wheel and finalize the release-candidate checksum.
+Then run the complete model-backed workflow from the installed wheel.

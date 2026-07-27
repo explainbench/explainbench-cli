@@ -651,7 +651,7 @@ It reported seven passes in 368.23 seconds from a non-editable wheel.
 The CI environment uses Python 3.12 and the locked uv environment.
 The real workflow does not enable candidate inference and does not require a model API key.
 
-## Provisional release candidate
+## Release candidate
 
 The confirmed distribution name is `explain-bench`.
 The confirmed first version is `0.1.0`.
@@ -664,9 +664,9 @@ The current direct runtime dependencies use exact versions.
 The final unpinned direct dependency was `jsonpickle`.
 It is now pinned to the locked version `4.1.2`.
 
-The provisional wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
+The final local release-candidate wheel is `dist/explain_bench-0.1.0-py3-none-any.whl`.
 It contains 108 files.
-Its SHA-256 is `9ebd1054ddbaa781111fb739997c9862ddabd1eeda6b83c448d4281c117162e8`.
+Its SHA-256 is `b70b6d1d2166d6de4d0a23fbf485e3139a9003cbb6604ac33d520e3736501210`.
 
 The wheel contains the expected five top-level packages, eight runtime resources, console entry point, and pytest entry point.
 It contains no tests, examples, logs, results, generated caches, or build directories.
@@ -684,7 +684,6 @@ The real unpaid S07 candidate-preparation scenario passed in 376.84 seconds with
 ### Remaining release validation
 
 - The complete model-backed workflow has not run from a non-editable wheel.
-- The final release candidate must be rebuilt and inspected after the current metadata changes.
 
 ### Validation gaps
 
@@ -720,7 +719,6 @@ The package extraction and release work is tracked in [EXPLAINBENCH_CLI_EXTRACTI
 1. Push the current documentation and metadata changes to the separate repository.
 2. Confirm that the automatic fast and wheel-smoke workflows still pass.
 3. Run one complete model-backed workflow from the non-editable wheel.
-4. Build and inspect the final release candidate.
 
 ### Priority 2: Decide the end-to-end builder scope
 
