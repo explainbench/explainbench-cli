@@ -3,9 +3,6 @@
 This repository contains the package-focused ExplainBench implementation.
 The project website is [explainbench.github.io](https://explainbench.github.io).
 
-The initial package extraction from the ExplainBench research repository is complete.
-The package is ready for repository development and release-candidate validation.
-
 ## Installation
 
 ExplainBench supports Python 3.12.
@@ -204,38 +201,6 @@ The wheel installs its children as the existing top-level packages:
 - `tracer_plugin`
 
 The CLI wrapper is available as `explainbench`.
-
-## Current status
-
-The `dataset`, `execution`, `explainbench`, `tracer`, and `tracer_plugin` packages are present.
-Evaluation is implemented only under `explainbench.evaluation`.
-The historical top-level `evaluation` compatibility package is not included.
-The approved package examples and runtime resources are present.
-All approved core modules have been copied.
-The one-wheel package mapping and resource declarations are complete.
-The final Phase 6 wheel passed archive and installed-package checks.
-The complete suite reports 152 passed and 7 documented opt-in skips.
-The standalone tracer inspector and serializer suites also pass.
-Thirteen clean-wheel tests cover the checker, resources, mocked lite and full evaluation, direct task selection, result writing, checkpoint handling, model retries, all ten local-builder stages with mocked external commands, first-stage execution with real Git operations, canonical module resolution from `site-packages`, and paid-response recovery after a process interruption.
-The opt-in real Docker sequence reports seven passes for scenarios `S01` through `S07`.
-The same seven scenarios passed on a GitHub-hosted runner from a non-editable wheel while pytest and the installed CLI ran outside the repository.
-The manual workflow copies its tests and submission into a temporary directory and runs pytest and the installed CLI from outside the repository.
-One fresh complete model-backed local-effect workflow passed from a non-editable wheel for `sympy__sympy-15349`.
-All ten stages completed without an older workspace or reused checkpoint.
-The generated artifact passed typed evaluator loading and one real `local.effect` evaluation.
-The repeated builder command reused all ten stages.
-The sequence confirms artifact checksums and full resume without a second candidate-model request.
-Candidate inference now stores the complete prompt and each raw response before parsing.
-Checksummed attempt records support audit and reuse after interruption.
-
-One packaging adapter in `execution.util` builds the Docker tracer payload from the installed `tracer` and `tracer_plugin` packages.
-This removes the old dependency on a sibling `py-tracer` repository directory.
-
-## Development state
-
-The package extraction and local validation are complete.
-The release candidate passes the required CI workflows and TestPyPI downloaded-artifact validation.
-Production PyPI trusted publishing is configured and awaits the `v0.1.0` release tag.
 
 ## License
 

@@ -65,10 +65,3 @@ Use `EXPLAINBENCH_REAL_COMMAND_TIMEOUT_SECONDS` to change the outer per-command 
 
 Scenario `S07` passes `--no-candidate-inference` and must not call a model API.
 The seven opt-in tests remain unpaid so that an explicit test run cannot create an unexpected model charge.
-
-The final release acceptance separately completed one fresh model-backed workflow for `sympy__sympy-15349`.
-That validation started from a new workspace, generated candidates, executed and validated expressions, built answer choices, published local-effect artifacts, and evaluated the generated artifact.
-The repeated complete builder command reused all ten compatible stages and did not make another candidate request.
-
-The paid final acceptance run is retained as ignored workspace evidence.
-It is not an automated test because model-backed execution requires explicit approval for cost and data transfer.
